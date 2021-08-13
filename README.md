@@ -10,15 +10,22 @@ Findings and languages can be imported into DefectDojo via an [API](https://defe
 - No need to deal with `curl` and its syntax within the pipeline. This makes pipelines shorter and better readable.
 - All parameters are provided via environment variables, which works well with pipeline definitions like GitHub Actions or GitLab CI.
 
-## Commands
+## User guide
 
-`dd-reimport-findings.sh` - Re-imports findings into DefectDojo. Even though the name suggests otherwise, you do not need to do an initial import first. 
+### Installation
 
-`dd-import-languages.sh` - Imports languages data that have been gathered with the tool [cloc](https://github.com/AlDanial/cloc), see [Languages and lines of code](https://defectdojo.github.io/django-DefectDojo/integrations/languages/) for more details.
+- **Docker:** *tbd.*
+- **GitHub clone:** *tbd.*
 
-All commands are located in the `/usr/local/dd-import/bin` folder
+### Commands
 
-## Parameters
+`./bin/dd-reimport-findings.sh` - Re-imports findings into DefectDojo. Even though the name suggests otherwise, you do not need to do an initial import first. 
+
+`./bin/dd-import-languages.sh` - Imports languages data that have been gathered with the tool [cloc](https://github.com/AlDanial/cloc), see [Languages and lines of code](https://defectdojo.github.io/django-DefectDojo/integrations/languages/) for more details.
+
+In the docker image all commands are located in the `/usr/local/dd-import/bin` folder.
+
+### Parameters
 
 All parameters need to be provided as environment variables
 
@@ -40,7 +47,7 @@ All parameters need to be provided as environment variables
 | DD_VERSION            | Optional           | -                | |
 | DD_ENDPOINT_ID        | Optional           | -                | |
 
-## Usage
+### Usage
 
 This snippet from a [GitLab CI pipeline](.gitlab-ci.yml) serves as an example how `dd-import` can be integrated to upload data during build and deploy:
 
@@ -115,6 +122,14 @@ upload-cloc:
 - ***cloc*** - Example how to calculate the lines of code with [cloc](https://github.com/AlDanial/cloc). Output will be stored in JSON format (`cloc.json`).
 - ***upload_safety*** - This step will be executed after the `safety` step, gets its output file and sets some variables specific for this step. Then the script to import the findings from this scan is executed.
 - ***upload_cloc*** - This step will be executed after the `cloc` step, gets its output file and sets some variables specific for this step. Then the script to import the language data is executed.
+
+## Developer guide
+
+### Testing
+
+`./bin/runUnitTests.sh` - Runs the unit tests and reports the test coverage. 
+
+`./bin/runDockerUnitTests.sh` - First creates the docker image and then starts a docker container in which the unit tests are executed.
 
 ## License
 
