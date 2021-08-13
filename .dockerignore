@@ -1,0 +1,6 @@
+.git
+coverage_data
+data
+docker
+**/__pycache__
+env-file.txt

@@ -1,0 +1,121 @@
+# dd-import
+
+> A utility to (re-)import findings and language data into [DefectDojo](https://www.defectdojo.org/)
+
+Findings and languages can be imported into DefectDojo via an [API](https://defectdojo.github.io/django-DefectDojo/integrations/api-v2-docs/). To make automated build and deploy pipelines easier to implement, `dd-import` provides some convenience functions:
+
+- Product types, products, engagements and tests will be created if they are not existing. This avoids manual preparation in DefectDojo or complicated steps within the pipeline.
+- Product types, products, engagements and tests are referenced by name. This make pipelines more readable than using IDs.
+- Build information for `build_id`, `commit_hash` and `branch_tag` can be updated when uploading findings.
+- No need to deal with `curl` and its syntax within the pipeline. This makes pipelines shorter and better readable.
+- All parameters are provided via environment variables, which works well with pipeline definitions like GitHub Actions or GitLab CI.
+
+## Commands
+
+`dd-reimport-findings.sh` - Re-imports findings into DefectDojo. Even though the name suggests otherwise, you do not need to do an initial import first. 
+
+`dd-import-languages.sh` - Imports languages data that have been gathered with the tool [cloc](https://github.com/AlDanial/cloc), see [Languages and lines of code](https://defectdojo.github.io/django-DefectDojo/integrations/languages/) for more details.
+
+All commands are located in the `/usr/local/dd-import/bin` folder
+
+## Parameters
+
+All parameters need to be provided as environment variables
+
+| Parameter             | Re-import findings | Import languages | Remark |
+|-----------------------|:------------------:|:----------------:|--------|
+| DD_URL                | Mandatory          | Mandatory        | Base URL of the DefectDojo instance |
+| DD_API_KEY            | Mandatory          | Mandatory        | Shall be defined as a secret, eg. a protected variable in GitLab or an encrypted secret in GitHub |
+| DD_PRODUCT_TYPE_NAME  | Mandatory          | Mandatory        | Will be created if a product type with this name does not exist |
+| DD_PRODUCT_NAME       | Mandatory          | Mandatory        | Will be created if a product with this name does not exist |
+| DD_ENGAGEMENT_NAME    | Mandatory          | -                | Will be created if an engagement with this name does not exist for the given product |
+| DD_TEST_NAME          | Mandatory          | -                | Will be created if a test with this name does not exist for the given test |
+| DD_TEST_TYPE_NAME     | Mandatory          | -                | From DefectDojo's list of test types, eg. `Trivy Scan` | 
+| DD_FILE_NAME          | -                  | Mandatory        | |
+| DD_ACTIVE             | Optional           | -                | Default: `true` |
+| DD_VERIFIED           | Optional           | -                | Default: `true` |
+| DD_MINIMUM_SEVERITY   | Optional           | -                | |
+| DD_PUSH_TO_JIRA       | Optional           | -                | Default: `false` |
+| DD_CLOSE_OLD_FINDINGS | Optional           | -                | Default: `true` |
+| DD_VERSION            | Optional           | -                | |
+| DD_ENDPOINT_ID        | Optional           | -                | |
+
+## Usage
+
+This snippet from a [GitLab CI pipeline](.gitlab-ci.yml) serves as an example how `dd-import` can be integrated to upload data during build and deploy:
+
+```yaml
+variables:
+  DD_PRODUCT_TYPE_NAME: "Showcase"
+  DD_PRODUCT_NAME: "DefectDojo Importer"
+  DD_ENGAGEMENT_NAME: "GitLab"
+
+...
+
+safety:
+  stage: test
+  image: python:3.9-alpine
+  tags:
+    - build
+  script:
+    - pip install safety
+    - safety check -r requirements.txt --json --output safety.json
+  artifacts:
+    paths:
+    - safety.json
+    when: always
+    expire_in: 1 day
+
+cloc:
+  stage: test
+  image: node:16
+  tags:
+    - build
+  before_script:
+    - npm install -g cloc
+  script:
+    - cloc src --json -out cloc.json
+  artifacts:
+    paths:
+    - cloc.json
+    when: always
+    expire_in: 1 day
+
+upload-safety:
+  image: docker.maibornwolff.de/csec/defectdojo-import:latest
+  needs:
+    - job: safety
+      artifacts: true  
+  stage: upload
+  tags:
+    - build
+  variables:
+    DD_TEST_NAME: "Safety"
+    DD_TEST_TYPE_NAME: "Safety Scan"
+    DD_FILE_NAME: "safety.json"
+  script:
+    - /usr/local/dd-import/bin/dd-reimport-findings.sh
+
+upload-cloc:
+  image: docker.maibornwolff.de/csec/defectdojo-import:latest
+  needs:
+    - job: cloc
+      artifacts: true  
+  stage: upload
+  tags:
+    - build
+  variables:
+    DD_FILE_NAME: "cloc.json"
+  script:
+    - /usr/local/dd-import/bin/dd-import-languages.sh
+```
+
+- ***variables*** - Definition of some environment variables that will be used for several uploads. `DD_URL` and `DD_API_KEY` are not defined here because they are protected variables for the GitLab project.
+- ***safety*** - Example for a vulnerability scan with [safety](https://github.com/pyupio/safety). Output will be stored in JSON format (`safety.json`).
+- ***cloc*** - Example how to calculate the lines of code with [cloc](https://github.com/AlDanial/cloc). Output will be stored in JSON format (`cloc.json`).
+- ***upload_safety*** - This step will be executed after the `safety` step, gets its output file and sets some variables specific for this step. Then the script to import the findings from this scan is executed.
+- ***upload_cloc*** - This step will be executed after the `cloc` step, gets its output file and sets some variables specific for this step. Then the script to import the language data is executed.
+
+## License
+
+Licensed under the [3-Clause BSD License](LICENSE.txt)
