@@ -7,7 +7,7 @@ updates:
   open-pull-requests-limit: 10
   target-branch: main
 - package-ecosystem: docker
-  directory: "/"
+  directory: "docker"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
