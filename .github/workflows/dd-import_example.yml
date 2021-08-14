@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      DD_URL: ${{ secrets.DD_URL }}
+      DD_API_KEY: ${{ secrets.DD_API_KEY }}
       DD_PRODUCT_TYPE_NAME: "Research and Development"
       DD_PRODUCT_NAME: "DefectDojo Importer"
       DD_ENGAGEMENT_NAME: "GitLab"
