@@ -2,3 +2,5 @@
 env-file.txt
 data/
 coverage_data/
+dd_import_stefanf.egg-info
+dist

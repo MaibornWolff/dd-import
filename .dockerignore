@@ -5,3 +5,6 @@ data
 docker
 **/__pycache__
 env-file.txt
+dd_import_stefanf.egg-info
+distproject.toml
+setup.cfg
