@@ -30,8 +30,8 @@ jobs:
           safety check -r requirements.txt --json --output safety.json
       - name: Upload to DefectDojo
         env:
-          DD_TEST_NAME: "Safety"
-          DD_TEST_TYPE_NAME: "Safety Scan"
-          DD_FILE_NAME: "safety.json"
+          DD_TEST_NAME: Safety
+          DD_TEST_TYPE_NAME: Safety Scan
+          DD_FILE_NAME: Safety.json
         run: |
           ./bin/dd-reimport-findings.sh
