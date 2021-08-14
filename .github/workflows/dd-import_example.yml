@@ -1,0 +1,35 @@
+name: Example for dd-import
+
+on: [workflow_dispatch]
+
+jobs:
+  safety-check:
+
+    runs-on: ubuntu-latest
+
+    env:
+      DD_PRODUCT_TYPE_NAME: "Research and Development"
+      DD_PRODUCT_NAME: "DefectDojo Importer"
+      DD_ENGAGEMENT_NAME: "GitLab"
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install safety
+          pip install -r requirements.txt
+      - name: Safety check
+        run: |
+          safety check -r requirements.txt --json --output safety.json
+      - name: Upload to DefectDojo
+        env:
+          DD_TEST_NAME: "Safety"
+          DD_TEST_TYPE_NAME: "Safety Scan"
+          DD_FILE_NAME: "safety.json"
+        run: |
+          ./bin/dd-reimport-findings.sh
