@@ -28,10 +28,19 @@ jobs:
       - name: Safety check
         run: |
           safety check -r requirements.txt --json --output safety.json
-      - name: Upload to DefectDojo
+      - name: Upload safety check to DefectDojo
         env:
           DD_TEST_NAME: Safety
           DD_TEST_TYPE_NAME: Safety Scan
           DD_FILE_NAME: safety.json
         run: |
           dd-reimport-findings
+      - name: Count lines of code
+        run: |
+          sudo apt install cloc
+          cloc . --json -out cloc.json
+      - name: Upload cloc to DefectDojo
+        env:
+          DD_FILE_NAME: cloc.json
+        run: |
+          dd-import-languages
