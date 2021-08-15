@@ -4,7 +4,7 @@
 
 Findings and languages can be imported into DefectDojo via an [API](https://defectdojo.github.io/django-DefectDojo/integrations/api-v2-docs/). To make automated build and deploy pipelines easier to implement, `dd-import` provides some convenience functions:
 
-- Product types, products, engagements and tests will be created if they are not existing. This avoids manual preparation in DefectDojo or complicated steps within the pipeline.
+- Products, engagements and tests will be created if they are not existing. This avoids manual preparation in DefectDojo or complicated steps within the pipeline.
 - Product types, products, engagements and tests are referenced by name. This make pipelines more readable than using IDs.
 - Build information for `build_id`, `commit_hash` and `branch_tag` can be updated when uploading findings.
 - No need to deal with `curl` and its syntax within the pipeline. This makes pipelines shorter and better readable.
