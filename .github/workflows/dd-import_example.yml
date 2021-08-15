@@ -3,7 +3,7 @@ name: Example for dd-import
 on: [workflow_dispatch]
 
 jobs:
-  safety-check:
+  dd-import_example:
 
     runs-on: ubuntu-latest
 

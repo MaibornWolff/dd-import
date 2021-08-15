@@ -12,18 +12,41 @@ Findings and languages can be imported into DefectDojo via an [API](https://defe
 
 ## User guide
 
-### Installation
+### Installation and commands
 
-- **Docker:** *tbd.*
-- **GitHub clone:** *tbd.*
+**Python**
 
-### Commands
+Install safety with pip. Keep in mind that we support only Python 3.8 and up.
 
-`./bin/dd-reimport-findings.sh` - Re-imports findings into DefectDojo. Even though the name suggests otherwise, you do not need to do an initial import first. 
+```bash
+pip install dd-import
+```
 
-`./bin/dd-import-languages.sh` - Imports languages data that have been gathered with the tool [cloc](https://github.com/AlDanial/cloc), see [Languages and lines of code](https://defectdojo.github.io/django-DefectDojo/integrations/languages/) for more details.
+The command `dd-reimport-findings` re-imports findings into DefectDojo. Even though the name suggests otherwise, you do not need to do an initial import first. 
 
-In the docker image all commands are located in the `/usr/local/dd-import/bin` folder.
+The command `dd-import-languages` imports languages data that have been gathered with the tool [cloc](https://github.com/AlDanial/cloc), see [Languages and lines of code](https://defectdojo.github.io/django-DefectDojo/integrations/languages/) for more details.
+
+
+**Docker**
+
+Docker images can be found in https://hub.docker.com/r/maibornwolff/dd-import.
+
+A re-import of findings can be started with 
+
+```bash
+docker run --rm dd-import:latest ./bin/dd-reimport-findings.sh
+```
+
+Importing languages data can be started with
+
+
+```bash
+docker run --rm dd-import:latest ./bin/dd-import-languages.sh
+```
+
+Please note you have to set the environment variables as described below and mount a folder containing the file with scan results when running the docker container.
+
+`/usr/local/dd-import` is the working directory of the docker image, all commands are located in the `/usr/local/dd-import/bin` folder.
 
 ### Parameters
 
@@ -33,12 +56,12 @@ All parameters need to be provided as environment variables
 |-----------------------|:------------------:|:----------------:|--------|
 | DD_URL                | Mandatory          | Mandatory        | Base URL of the DefectDojo instance |
 | DD_API_KEY            | Mandatory          | Mandatory        | Shall be defined as a secret, eg. a protected variable in GitLab or an encrypted secret in GitHub |
-| DD_PRODUCT_TYPE_NAME  | Mandatory          | Mandatory        | Will be created if a product type with this name does not exist |
-| DD_PRODUCT_NAME       | Mandatory          | Mandatory        | Will be created if a product with this name does not exist |
-| DD_ENGAGEMENT_NAME    | Mandatory          | -                | Will be created if an engagement with this name does not exist for the given product |
-| DD_TEST_NAME          | Mandatory          | -                | Will be created if a test with this name does not exist for the given test |
+| DD_PRODUCT_TYPE_NAME  | Mandatory          | Mandatory        | A product type with this name must exist |
+| DD_PRODUCT_NAME       | Mandatory          | Mandatory        | If a product with this name does not exist, it will be created |
+| DD_ENGAGEMENT_NAME    | Mandatory          | -                | If an engagement with this name does not exist for the given product, it will be created |
+| DD_TEST_NAME          | Mandatory          | -                | If a test with this name does not exist for the given engagement, it will be created |
 | DD_TEST_TYPE_NAME     | Mandatory          | -                | From DefectDojo's list of test types, eg. `Trivy Scan` | 
-| DD_FILE_NAME          | -                  | Mandatory        | |
+| DD_FILE_NAME          | Optional           | Mandatory        | |
 | DD_ACTIVE             | Optional           | -                | Default: `true` |
 | DD_VERIFIED           | Optional           | -                | Default: `true` |
 | DD_MINIMUM_SEVERITY   | Optional           | -                | |
@@ -46,10 +69,13 @@ All parameters need to be provided as environment variables
 | DD_CLOSE_OLD_FINDINGS | Optional           | -                | Default: `true` |
 | DD_VERSION            | Optional           | -                | |
 | DD_ENDPOINT_ID        | Optional           | -                | |
+| DD_BUILD_ID           | Optional           | -                | |
+| DD_COMMIT_HASH        | Optional           | -                | |
+| DD_BRANCH_TAG         | Optional           | -                | |
 
 ### Usage
 
-This snippet from a [GitLab CI pipeline](.gitlab-ci.yml) serves as an example how `dd-import` can be integrated to upload data during build and deploy:
+This snippet from a [GitLab CI pipeline](.gitlab-ci.yml) serves as an example how `dd-import` can be integrated to upload data during build and deploy using the docker image:
 
 ```yaml
 variables:
@@ -89,7 +115,7 @@ cloc:
     expire_in: 1 day
 
 upload-safety:
-  image: docker.maibornwolff.de/csec/defectdojo-import:latest
+  image: maibornwolff/dd-import:latest
   needs:
     - job: safety
       artifacts: true  
@@ -104,7 +130,7 @@ upload-safety:
     - /usr/local/dd-import/bin/dd-reimport-findings.sh
 
 upload-cloc:
-  image: docker.maibornwolff.de/csec/defectdojo-import:latest
+  image: maibornwolff/dd-import:latest
   needs:
     - job: cloc
       artifacts: true  
@@ -122,6 +148,8 @@ upload-cloc:
 - ***cloc*** - Example how to calculate the lines of code with [cloc](https://github.com/AlDanial/cloc). Output will be stored in JSON format (`cloc.json`).
 - ***upload_safety*** - This step will be executed after the `safety` step, gets its output file and sets some variables specific for this step. Then the script to import the findings from this scan is executed.
 - ***upload_cloc*** - This step will be executed after the `cloc` step, gets its output file and sets some variables specific for this step. Then the script to import the language data is executed.
+
+Another example, showing how to use `dd-import` within a GitHub Action, can be found in [dd-import_example.yml](.github/workflows/dd-import_example.yml).
 
 ## Developer guide
 
