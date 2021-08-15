@@ -16,7 +16,7 @@ Findings and languages can be imported into DefectDojo via an [API](https://defe
 
 **Python**
 
-Install safety with pip. Keep in mind that we support only Python 3.8 and up.
+`dd-import` can be installed with pip. Only Python 3.8 and up is suported.
 
 ```bash
 pip install dd-import
