@@ -6,5 +6,6 @@ docker
 **/__pycache__
 env-file.txt
 dd_import_stefanf.egg-info
+dd_import.egg-info
 distproject.toml
 setup.cfg
