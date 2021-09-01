@@ -23,6 +23,8 @@ trivy:
   stage: test
   tags:
     - build
+  variables:
+    GIT_STRATEGY: none
   before_script:
     - export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
     - echo $TRIVY_VERSION
@@ -40,6 +42,8 @@ dockle:
   stage: test
   tags:
     - build
+  variables:
+    GIT_STRATEGY: none
   before_script:
     - apk -Uuv add bash git curl tar sed grep
     - |
@@ -91,6 +95,8 @@ cloc:
 upload_bandit:
   stage: upload
   image: ${DOCKER_ARTIFACT_URL}
+  variables:
+    GIT_STRATEGY: none
   needs:
     - job: bandit-sast
       artifacts: true  
@@ -104,6 +110,8 @@ upload_bandit:
 upload_trivy:
   stage: upload
   image: ${DOCKER_ARTIFACT_URL}
+  variables:
+    GIT_STRATEGY: none
   needs:
     - job: trivy
       artifacts: true  
@@ -115,11 +123,13 @@ upload_trivy:
     - /usr/local/dd-import/bin/dd-reimport-findings.sh
 
 upload-dockle:
+  stage: upload
   image: ${DOCKER_ARTIFACT_URL}
+  variables:
+    GIT_STRATEGY: none
   needs:
     - job: dockle
       artifacts: true  
-  stage: upload
   tags:
     - build
   variables:
@@ -133,11 +143,13 @@ upload-dockle:
     - /usr/local/dd-import/bin/dd-reimport-findings.sh
 
 upload-safety:
+  stage: upload
   image: ${DOCKER_ARTIFACT_URL}
+  variables:
+    GIT_STRATEGY: none
   needs:
     - job: safety
       artifacts: true  
-  stage: upload
   tags:
     - build
   variables:
@@ -148,11 +160,13 @@ upload-safety:
     - /usr/local/dd-import/bin/dd-reimport-findings.sh
 
 upload-cloc:
+  stage: upload
   image: ${DOCKER_ARTIFACT_URL}
+  variables:
+    GIT_STRATEGY: none
   needs:
     - job: cloc
       artifacts: true  
-  stage: upload
   tags:
     - build
   variables:
