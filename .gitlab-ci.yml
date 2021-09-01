@@ -1,0 +1,161 @@
+
+variables:
+  DOCKER_ARTIFACT_URL: "maibornwolff/dd-import:1.0.1"
+  DD_PRODUCT_TYPE_NAME: "Showcase"
+  DD_PRODUCT_NAME: "DefectDojo Importer"
+  DD_ENGAGEMENT_NAME: "GitLab"
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
+bandit-sast:
+  artifacts:
+    paths:
+    - gl-sast-report.json
+    when: always
+    expire_in: 1 day
+
+stages:
+  - test
+  - upload
+
+trivy:
+  stage: test
+  tags:
+    - build
+  before_script:
+    - export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+    - echo $TRIVY_VERSION
+    - wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
+  allow_failure: true
+  script:
+    - ./trivy --exit-code 0 --no-progress -f json -o trivy.json "$DOCKER_ARTIFACT_URL"
+  artifacts:
+    paths:
+    - trivy.json
+    when: always
+    expire_in: 1 day
+
+dockle:
+  stage: test
+  tags:
+    - build
+  before_script:
+    - apk -Uuv add bash git curl tar sed grep
+    - |
+      VERSION=$(
+      curl --silent "https://api.github.com/repos/goodwithtech/dockle/releases/latest" | \
+      grep '"tag_name":' | \
+      sed -E 's/.*"v([^"]+)".*/\1/' \
+      ) && curl -L -o dockle.tar.gz https://github.com/goodwithtech/dockle/releases/download/v${VERSION}/dockle_${VERSION}_Linux-64bit.tar.gz &&  \
+      tar zxvf dockle.tar.gz
+  allow_failure: true
+  script:
+    - ./dockle -f json -o dockle.json --exit-code 0 "$DOCKER_ARTIFACT_URL"
+  artifacts:
+    paths:
+    - dockle.json
+    when: always
+    expire_in: 1 day
+
+safety:
+  stage: test
+  image: python:3.9-alpine
+  tags:
+    - build
+  allow_failure: true
+  script:
+    - pip install safety
+    - safety check -r requirements.txt --json --output safety.json
+  artifacts:
+    paths:
+    - safety.json
+    when: always
+    expire_in: 1 day
+
+cloc:
+  stage: test
+  image: node:16
+  tags:
+    - build
+  before_script:
+    - npm install -g cloc
+  script:
+    - cloc . --json -out cloc.json
+  artifacts:
+    paths:
+    - cloc.json
+    when: always
+    expire_in: 1 day
+
+upload_bandit:
+  stage: upload
+  image: ${DOCKER_ARTIFACT_URL}
+  needs:
+    - job: bandit-sast
+      artifacts: true  
+  variables:
+    DD_TEST_NAME: "Bandit"
+    DD_TEST_TYPE_NAME: "GitLab SAST Report"
+    DD_FILE_NAME: "gl-sast-report.json"
+  script:
+    - /usr/local/dd-import/bin/dd-reimport-findings.sh
+
+upload_trivy:
+  stage: upload
+  image: ${DOCKER_ARTIFACT_URL}
+  needs:
+    - job: trivy
+      artifacts: true  
+  variables:
+    DD_TEST_NAME: "Trivy"
+    DD_TEST_TYPE_NAME: "Trivy Scan"
+    DD_FILE_NAME: "trivy.json"
+  script:
+    - /usr/local/dd-import/bin/dd-reimport-findings.sh
+
+upload-dockle:
+  image: ${DOCKER_ARTIFACT_URL}
+  needs:
+    - job: dockle
+      artifacts: true  
+  stage: upload
+  tags:
+    - build
+  variables:
+    DD_TEST_NAME: "Dockle"
+    DD_TEST_TYPE_NAME: "Dockle Scan"
+    DD_FILE_NAME: "dockle.json"
+    DD_BUILD_ID: "$CI_PIPELINE_ID"
+    DD_COMMIT_HASH: "$CI_COMMIT_SHA"
+    DD_BRANCH_TAG: "$CI_COMMIT_REF_NAME"
+  script:
+    - /usr/local/dd-import/bin/dd-reimport-findings.sh
+
+upload-safety:
+  image: ${DOCKER_ARTIFACT_URL}
+  needs:
+    - job: safety
+      artifacts: true  
+  stage: upload
+  tags:
+    - build
+  variables:
+    DD_TEST_NAME: "Safety"
+    DD_TEST_TYPE_NAME: "Safety Scan"
+    DD_FILE_NAME: "safety.json"
+  script:
+    - /usr/local/dd-import/bin/dd-reimport-findings.sh
+
+upload-cloc:
+  image: ${DOCKER_ARTIFACT_URL}
+  needs:
+    - job: cloc
+      artifacts: true  
+  stage: upload
+  tags:
+    - build
+  variables:
+    DD_FILE_NAME: "cloc.json"
+  script:
+    - /usr/local/dd-import/bin/dd-import-languages.sh
