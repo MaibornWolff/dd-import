@@ -95,12 +95,11 @@ cloc:
 upload_bandit:
   stage: upload
   image: ${DOCKER_ARTIFACT_URL}
-  variables:
-    GIT_STRATEGY: none
   needs:
     - job: bandit-sast
       artifacts: true  
   variables:
+    GIT_STRATEGY: none
     DD_TEST_NAME: "Bandit"
     DD_TEST_TYPE_NAME: "GitLab SAST Report"
     DD_FILE_NAME: "gl-sast-report.json"
@@ -110,12 +109,11 @@ upload_bandit:
 upload_trivy:
   stage: upload
   image: ${DOCKER_ARTIFACT_URL}
-  variables:
-    GIT_STRATEGY: none
   needs:
     - job: trivy
       artifacts: true  
   variables:
+    GIT_STRATEGY: none
     DD_TEST_NAME: "Trivy"
     DD_TEST_TYPE_NAME: "Trivy Scan"
     DD_FILE_NAME: "trivy.json"
@@ -125,14 +123,13 @@ upload_trivy:
 upload-dockle:
   stage: upload
   image: ${DOCKER_ARTIFACT_URL}
-  variables:
-    GIT_STRATEGY: none
   needs:
     - job: dockle
       artifacts: true  
   tags:
     - build
   variables:
+    GIT_STRATEGY: none
     DD_TEST_NAME: "Dockle"
     DD_TEST_TYPE_NAME: "Dockle Scan"
     DD_FILE_NAME: "dockle.json"
@@ -145,14 +142,13 @@ upload-dockle:
 upload-safety:
   stage: upload
   image: ${DOCKER_ARTIFACT_URL}
-  variables:
-    GIT_STRATEGY: none
   needs:
     - job: safety
       artifacts: true  
   tags:
     - build
   variables:
+    GIT_STRATEGY: none
     DD_TEST_NAME: "Safety"
     DD_TEST_TYPE_NAME: "Safety Scan"
     DD_FILE_NAME: "safety.json"
@@ -162,14 +158,13 @@ upload-safety:
 upload-cloc:
   stage: upload
   image: ${DOCKER_ARTIFACT_URL}
-  variables:
-    GIT_STRATEGY: none
   needs:
     - job: cloc
       artifacts: true  
   tags:
     - build
   variables:
+    GIT_STRATEGY: none
     DD_FILE_NAME: "cloc.json"
   script:
     - /usr/local/dd-import/bin/dd-import-languages.sh
