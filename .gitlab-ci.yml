@@ -62,21 +62,6 @@ dockle:
     when: always
     expire_in: 1 day
 
-safety:
-  stage: test
-  image: python:3.9-alpine
-  tags:
-    - build
-  allow_failure: true
-  script:
-    - pip install safety
-    - safety check -r requirements.txt --json --output safety.json
-  artifacts:
-    paths:
-    - safety.json
-    when: always
-    expire_in: 1 day
-
 cloc:
   stage: test
   image: node:16
@@ -136,22 +121,6 @@ upload-dockle:
     DD_BUILD_ID: "$CI_PIPELINE_ID"
     DD_COMMIT_HASH: "$CI_COMMIT_SHA"
     DD_BRANCH_TAG: "$CI_COMMIT_REF_NAME"
-  script:
-    - /usr/local/dd-import/bin/dd-reimport-findings.sh
-
-upload-safety:
-  stage: upload
-  image: ${DOCKER_ARTIFACT_URL}
-  needs:
-    - job: safety
-      artifacts: true  
-  tags:
-    - build
-  variables:
-    GIT_STRATEGY: none
-    DD_TEST_NAME: "Safety"
-    DD_TEST_TYPE_NAME: "Safety Scan"
-    DD_FILE_NAME: "safety.json"
   script:
     - /usr/local/dd-import/bin/dd-reimport-findings.sh
 
