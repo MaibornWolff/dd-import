@@ -69,6 +69,7 @@ All parameters need to be provided as environment variables
 | DD_CLOSE_OLD_FINDINGS | Optional           | -                | Default: `true` |
 | DD_VERSION            | Optional           | -                | |
 | DD_ENDPOINT_ID        | Optional           | -                | |
+| DD_SERVICE            | Optional           | -                | |
 | DD_BUILD_ID           | Optional           | -                | |
 | DD_COMMIT_HASH        | Optional           | -                | |
 | DD_BRANCH_TAG         | Optional           | -                | |
@@ -85,17 +86,22 @@ variables:
 
 ...
 
-safety:
+trivy:
   stage: test
-  image: python:3.9-alpine
   tags:
     - build
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+    - echo $TRIVY_VERSION
+    - wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
+  allow_failure: true
   script:
-    - pip install safety
-    - safety check -r requirements.txt --json --output safety.json
+    - ./trivy --exit-code 0 --no-progress -f json -o trivy.json maibornwolff/dd-import:latest
   artifacts:
     paths:
-    - safety.json
+    - trivy.json
     when: always
     expire_in: 1 day
 
@@ -114,18 +120,17 @@ cloc:
     when: always
     expire_in: 1 day
 
-upload-safety:
+upload_trivy:
+  stage: upload
   image: maibornwolff/dd-import:latest
   needs:
-    - job: safety
+    - job: trivy
       artifacts: true  
-  stage: upload
-  tags:
-    - build
   variables:
-    DD_TEST_NAME: "Safety"
-    DD_TEST_TYPE_NAME: "Safety Scan"
-    DD_FILE_NAME: "safety.json"
+    GIT_STRATEGY: none
+    DD_TEST_NAME: "Trivy"
+    DD_TEST_TYPE_NAME: "Trivy Scan"
+    DD_FILE_NAME: "trivy.json"
   script:
     - /usr/local/dd-import/bin/dd-reimport-findings.sh
 
@@ -144,9 +149,9 @@ upload-cloc:
 ```
 
 - ***variables*** - Definition of some environment variables that will be used for several uploads. `DD_URL` and `DD_API_KEY` are not defined here because they are protected variables for the GitLab project.
-- ***safety*** - Example for a vulnerability scan with [safety](https://github.com/pyupio/safety). Output will be stored in JSON format (`safety.json`).
+- ***trivy*** - Example for a vulnerability scan with [trivy](https://github.com/aquasecurity/trivy). Output will be stored in JSON format (`trivy.json`).
 - ***cloc*** - Example how to calculate the lines of code with [cloc](https://github.com/AlDanial/cloc). Output will be stored in JSON format (`cloc.json`).
-- ***upload_safety*** - This step will be executed after the `safety` step, gets its output file and sets some variables specific for this step. Then the script to import the findings from this scan is executed.
+- ***upload_trivy*** - This step will be executed after the `trivy` step, gets its output file and sets some variables specific for this step. Then the script to import the findings from this scan is executed.
 - ***upload_cloc*** - This step will be executed after the `cloc` step, gets its output file and sets some variables specific for this step. Then the script to import the language data is executed.
 
 Another example, showing how to use `dd-import` within a GitHub Action, can be found in [dd-import_example.yml](.github/workflows/dd-import_example.yml).

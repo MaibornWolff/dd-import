@@ -32,6 +32,7 @@ jobs:
           DD_TEST_NAME: Semgrep
           DD_TEST_TYPE_NAME: Semgrep JSON Report
           DD_FILE_NAME: semgrep.json
+          DD_SERVICE: dd-import
         run: |
           dd-reimport-findings
       - name: Count lines of code

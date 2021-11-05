@@ -1,6 +1,6 @@
 
 variables:
-  DOCKER_ARTIFACT_URL: "maibornwolff/dd-import:1.0.2"
+  DOCKER_ARTIFACT_URL: "maibornwolff/dd-import:1.0.3"
   DD_PRODUCT_TYPE_NAME: "Showcase"
   DD_PRODUCT_NAME: "DefectDojo Importer"
   DD_ENGAGEMENT_NAME: "GitLab"
@@ -118,6 +118,7 @@ upload-dockle:
     DD_TEST_NAME: "Dockle"
     DD_TEST_TYPE_NAME: "Dockle Scan"
     DD_FILE_NAME: "dockle.json"
+    DD_SERVICE: "dd-import"
     DD_BUILD_ID: "$CI_PIPELINE_ID"
     DD_COMMIT_HASH: "$CI_COMMIT_SHA"
     DD_BRANCH_TAG: "$CI_COMMIT_REF_NAME"
