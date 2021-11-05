@@ -165,6 +165,8 @@ class Api:
             payload['version'] = self.environment.version
         if self.environment.endpoint_id is not None:
             payload['endpoint_to_add'] = int(self.environment.endpoint_id)
+        if self.environment.service is not None:
+            payload['service'] = self.environment.service
 
         if self.environment.file_name is not None:
             files = {'file': (self.environment.file_name,

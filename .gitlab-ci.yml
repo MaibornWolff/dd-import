@@ -102,6 +102,7 @@ upload_trivy:
     DD_TEST_NAME: "Trivy"
     DD_TEST_TYPE_NAME: "Trivy Scan"
     DD_FILE_NAME: "trivy.json"
+    DD_SERVICE: "dd-import"
   script:
     - /usr/local/dd-import/bin/dd-reimport-findings.sh
 

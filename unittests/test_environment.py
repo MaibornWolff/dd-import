@@ -33,6 +33,7 @@ class TestEnvironment(TestCase):
                                'DD_CLOSE_OLD_FINDINGS': 'False',
                                'DD_VERSION': 'version',
                                'DD_ENDPOINT_ID': 'endpoint_id',
+                               'DD_SERVICE': 'service',
                                'DD_BUILD_ID': 'build_id',
                                'DD_COMMIT_HASH': 'commit_hash',
                                'DD_BRANCH_TAG': 'branch_tag'})
@@ -57,6 +58,7 @@ class TestEnvironment(TestCase):
         self.assertFalse(environment.close_old_findings)
         self.assertEqual(environment.version, 'version')
         self.assertEqual(environment.endpoint_id, 'endpoint_id')
+        self.assertEqual(environment.service, 'service')
         self.assertEqual(environment.build_id, 'build_id')
         self.assertEqual(environment.commit_hash, 'commit_hash')
         self.assertEqual(environment.branch_tag, 'branch_tag')

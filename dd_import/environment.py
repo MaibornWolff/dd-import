@@ -19,6 +19,7 @@ class Environment:
         self.close_old_findings = os.getenv('DD_CLOSE_OLD_FINDINGS', 'True').lower() in ['true']
         self.version = os.getenv('DD_VERSION', None)
         self.endpoint_id = os.getenv('DD_ENDPOINT_ID', None)
+        self.service = os.getenv('DD_SERVICE', None)
         self.build_id = os.getenv('DD_BUILD_ID', None)
         self.commit_hash = os.getenv('DD_COMMIT_HASH', None)
         self.branch_tag = os.getenv('DD_BRANCH_TAG', None)
@@ -55,6 +56,7 @@ class Environment:
         print('DD_CLOSE_OLD_FINDINGS: ', self.close_old_findings)
         print('DD_VERSION:            ', self.version)
         print('DD_ENDPOINT_ID:        ', self.endpoint_id)
+        print('DD_SERVICE:            ', self.service)
         print('DD_BUILD_ID:           ', self.build_id)
         print('DD_COMMIT_HASH:        ', self.commit_hash)
         print('DD_BRANCH_TAG:         ', self.branch_tag)

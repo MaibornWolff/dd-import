@@ -351,7 +351,8 @@ class TestApi(TestCase):
                                'DD_CLOSE_OLD_FINDINGS': 'true',
                                'DD_MINIMUM_SEVERITY': 'Info',
                                'DD_VERSION': 'version',
-                               'DD_ENDPOINT_ID': '6'})
+                               'DD_ENDPOINT_ID': '6',
+                               'DD_SERVICE': 'service'})
     def test_reimport_findings_without_file(self, mockPost, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
@@ -370,7 +371,8 @@ class TestApi(TestCase):
                    'close_old_findings': True,
                    'minimum_severity': 'Info',
                    'version': 'version',
-                   'endpoint_to_add': 6
+                   'endpoint_to_add': 6,
+                   'service': 'service'
                    }
         mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload)
         response.raise_for_status.assert_called_once()
