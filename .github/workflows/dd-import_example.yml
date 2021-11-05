@@ -26,7 +26,7 @@ jobs:
           pip install semgrep dd-import
       - name: Semgrep check
         run: |
-          semgrep --config=r/python --json -o semgrep.json
+          semgrep --config=r/python --json -o semgrep.json --exclude dd_import/environment.py ./dd_import
       - name: Upload Semgrep check to DefectDojo
         env:
           DD_TEST_NAME: Semgrep
