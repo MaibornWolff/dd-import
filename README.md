@@ -132,7 +132,7 @@ upload_trivy:
     DD_TEST_TYPE_NAME: "Trivy Scan"
     DD_FILE_NAME: "trivy.json"
   script:
-    - /usr/local/dd-import/bin/dd-reimport-findings.sh
+    - dd-reimport-findings.sh
 
 upload-cloc:
   image: maibornwolff/dd-import:latest
@@ -145,7 +145,7 @@ upload-cloc:
   variables:
     DD_FILE_NAME: "cloc.json"
   script:
-    - /usr/local/dd-import/bin/dd-import-languages.sh
+    - dd-import-languages.sh
 ```
 
 - ***variables*** - Definition of some environment variables that will be used for several uploads. `DD_URL` and `DD_API_KEY` are not defined here because they are protected variables for the GitLab project.
