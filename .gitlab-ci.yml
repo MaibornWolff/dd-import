@@ -1,6 +1,6 @@
 
 variables:
-  DOCKER_ARTIFACT_URL: "maibornwolff/dd-import:1.0.3"
+  DOCKER_ARTIFACT_URL: "maibornwolff/dd-import:1.0.4"
   DD_PRODUCT_TYPE_NAME: "Showcase"
   DD_PRODUCT_NAME: "DefectDojo Importer"
   DD_ENGAGEMENT_NAME: "GitLab"
@@ -89,7 +89,7 @@ upload_bandit:
     DD_TEST_TYPE_NAME: "GitLab SAST Report"
     DD_FILE_NAME: "gl-sast-report.json"
   script:
-    - /usr/local/dd-import/bin/dd-reimport-findings.sh
+    - dd-reimport-findings.sh
 
 upload_trivy:
   stage: upload
@@ -103,7 +103,7 @@ upload_trivy:
     DD_TEST_TYPE_NAME: "Trivy Scan"
     DD_FILE_NAME: "trivy.json"
   script:
-    - /usr/local/dd-import/bin/dd-reimport-findings.sh
+    - dd-reimport-findings.sh
 
 upload-dockle:
   stage: upload
@@ -123,7 +123,7 @@ upload-dockle:
     DD_COMMIT_HASH: "$CI_COMMIT_SHA"
     DD_BRANCH_TAG: "$CI_COMMIT_REF_NAME"
   script:
-    - /usr/local/dd-import/bin/dd-reimport-findings.sh
+    - dd-reimport-findings.sh
 
 upload-cloc:
   stage: upload
@@ -137,4 +137,4 @@ upload-cloc:
     GIT_STRATEGY: none
     DD_FILE_NAME: "cloc.json"
   script:
-    - /usr/local/dd-import/bin/dd-import-languages.sh
+    - dd-import-languages.sh
