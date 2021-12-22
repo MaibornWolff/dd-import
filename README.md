@@ -34,14 +34,14 @@ Docker images can be found in https://hub.docker.com/r/maibornwolff/dd-import.
 A re-import of findings can be started with 
 
 ```bash
-docker run --rm dd-import:latest ./bin/dd-reimport-findings.sh
+docker run --rm dd-import:latest dd-reimport-findings.sh
 ```
 
 Importing languages data can be started with
 
 
 ```bash
-docker run --rm dd-import:latest ./bin/dd-import-languages.sh
+docker run --rm dd-import:latest dd-import-languages.sh
 ```
 
 Please note you have to set the environment variables as described below and mount a folder containing the file with scan results when running the docker container.
