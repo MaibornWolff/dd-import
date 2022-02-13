@@ -5,8 +5,8 @@ variables:
   DD_PRODUCT_NAME: "DefectDojo Importer"
   DD_ENGAGEMENT_NAME: "GitLab"
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
+# include:
+#   - template: Security/SAST.gitlab-ci.yml
 
 bandit-sast:
   artifacts:
@@ -77,19 +77,19 @@ cloc:
     when: always
     expire_in: 1 day
 
-upload_bandit:
-  stage: upload
-  image: ${DOCKER_ARTIFACT_URL}
-  needs:
-    - job: bandit-sast
-      artifacts: true  
-  variables:
-    GIT_STRATEGY: none
-    DD_TEST_NAME: "Bandit"
-    DD_TEST_TYPE_NAME: "GitLab SAST Report"
-    DD_FILE_NAME: "gl-sast-report.json"
-  script:
-    - dd-reimport-findings.sh
+# upload_bandit:
+#   stage: upload
+#   image: ${DOCKER_ARTIFACT_URL}
+#   needs:
+#     - job: bandit-sast
+#       artifacts: true  
+#   variables:
+#     GIT_STRATEGY: none
+#     DD_TEST_NAME: "Bandit"
+#     DD_TEST_TYPE_NAME: "GitLab SAST Report"
+#     DD_FILE_NAME: "gl-sast-report.json"
+#   script:
+#     - dd-reimport-findings.sh
 
 upload_trivy:
   stage: upload
