@@ -5,15 +5,15 @@ variables:
   DD_PRODUCT_NAME: "DefectDojo Importer"
   DD_ENGAGEMENT_NAME: "GitLab"
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
+# include:
+#   - template: Security/SAST.gitlab-ci.yml
 
-bandit-sast:
-  artifacts:
-    paths:
-    - gl-sast-report.json
-    when: always
-    expire_in: 1 day
+# bandit-sast:
+#   artifacts:
+#     paths:
+#     - gl-sast-report.json
+#     when: always
+#     expire_in: 1 day
 
 stages:
   - test
@@ -31,7 +31,7 @@ trivy:
     - wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
   allow_failure: true
   script:
-    - ./trivy --exit-code 0 --no-progress -f json -o trivy.json "$DOCKER_ARTIFACT_URL"
+    - ./trivy image --no-progress -f json -o trivy.json "$DOCKER_ARTIFACT_URL"
   artifacts:
     paths:
     - trivy.json
@@ -77,19 +77,19 @@ cloc:
     when: always
     expire_in: 1 day
 
-upload_bandit:
-  stage: upload
-  image: ${DOCKER_ARTIFACT_URL}
-  needs:
-    - job: bandit-sast
-      artifacts: true  
-  variables:
-    GIT_STRATEGY: none
-    DD_TEST_NAME: "Bandit"
-    DD_TEST_TYPE_NAME: "GitLab SAST Report"
-    DD_FILE_NAME: "gl-sast-report.json"
-  script:
-    - dd-reimport-findings.sh
+# upload_bandit:
+#   stage: upload
+#   image: ${DOCKER_ARTIFACT_URL}
+#   needs:
+#     - job: bandit-sast
+#       artifacts: true  
+#   variables:
+#     GIT_STRATEGY: none
+#     DD_TEST_NAME: "Bandit"
+#     DD_TEST_TYPE_NAME: "GitLab SAST Report"
+#     DD_FILE_NAME: "gl-sast-report.json"
+#   script:
+#     - dd-reimport-findings.sh
 
 upload_trivy:
   stage: upload

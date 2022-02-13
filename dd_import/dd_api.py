@@ -28,13 +28,12 @@ class Api:
                          params=payload)
         r.raise_for_status()
         product_type_data = json.loads(r.text)
-        if product_type_data['count'] > 0:
-            product_type_id = product_type_data['results'][0]['id']
-            print('Product type found, id: ', product_type_id)
-            return product_type_id
-        else:
-            raise Exception('Product type {} not found'.
-                            format(self.environment.product_type_name))
+        for product_type in product_type_data.get('results', []):
+            if product_type.get('name', '') == self.environment.product_type_name:
+                product_type_id = product_type['id']
+                print('Product type found, id: ', product_type_id)
+                return product_type_id
+        raise Exception(f'Product type {self.environment.product_type_name} not found')
 
     def get_product(self, product_type):
         payload = {'name': self.environment.product_name,
@@ -44,12 +43,12 @@ class Api:
                          params=payload)
         r.raise_for_status()
         product_data = json.loads(r.text)
-        if product_data['count'] > 0:
-            product_id = product_data['results'][0]['id']
-            print('Product found,      id: ', product_id)
-            return product_id
-        else:
-            return self.new_product(product_type)
+        for product in product_data.get('results', []):
+            if product.get('name', '') == self.environment.product_name:
+                product_id = product['id']
+                print('Product found,      id: ', product_id)
+                return product_id
+        return self.new_product(product_type)
 
     def new_product(self, product_type):
         payload = {'name': self.environment.product_name,
@@ -71,12 +70,12 @@ class Api:
                          params=payload)
         r.raise_for_status()
         engagement_data = json.loads(r.text)
-        if engagement_data['count'] > 0:
-            engagement_id = engagement_data['results'][0]['id']
-            print('Engagement found,   id: ', engagement_id)
-            return engagement_id
-        else:
-            return self.new_engagement(product)
+        for engagement in engagement_data.get('results', []):
+            if engagement.get('name', '') == self.environment.engagement_name:
+                engagement_id = engagement['id']
+                print('Engagement found,   id: ', engagement_id)
+                return engagement_id
+        return self.new_engagement(product)
 
     def new_engagement(self, product):
         payload = {'name': self.environment.engagement_name,
@@ -113,12 +112,12 @@ class Api:
                          params=payload)
         r.raise_for_status()
         test_data = json.loads(r.text)
-        if test_data['count'] > 0:
-            test_id = test_data['results'][0]['id']
-            print('Test found,         id: ', test_id)
-            return test_id
-        else:
-            return self.new_test(engagement)
+        for test in test_data.get('results', []):
+            if test.get('title', '') == self.environment.test_name:
+                test_id = test['id']
+                print('Test found,         id: ', test_id)
+                return test_id
+        return self.new_test(engagement)
 
     def new_test(self, engagement):
         today = datetime.date.today()
@@ -144,11 +143,10 @@ class Api:
                          params=payload)
         r.raise_for_status()
         test_type_data = json.loads(r.text)
-        if test_type_data['count'] > 0:
-            return test_type_data['results'][0]['id']
-        else:
-            raise Exception('Test type {} not found'.
-                            format(self.environment.test_type_name))
+        for test_type in test_type_data.get('results', []):
+            if test_type.get('name', '') == self.environment.test_type_name:
+                return test_type['id']
+        raise Exception(f'Test type {self.environment.test_type_name} not found')
 
     def reimport_scan(self, test):
         payload = {'scan_date': datetime.date.today().isoformat(),

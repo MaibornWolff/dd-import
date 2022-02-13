@@ -29,7 +29,7 @@ class TestApi(TestCase):
     def test_get_product_type_found(self, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 1, \"results\": [{\"id\": 1}]}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 0, \"name\": \"product_type_dev\"}, {\"id\": 1, \"name\": \"product_type\"}]}'
         mockGet.return_value = response
 
         api = Api()
@@ -49,7 +49,7 @@ class TestApi(TestCase):
     def test_get_product_type_not_found(self, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 0}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 0, \"name\": \"product_type_dev\"}, {\"id\": 1, \"name\": \"product_type_prod\"}]}'
         mockGet.return_value = response
 
         with self.assertRaises(Exception) as cm:
@@ -70,7 +70,7 @@ class TestApi(TestCase):
     def test_get_product_found(self, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 1, \"results\": [{\"id\": 2}]}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 1, \"name\": \"product_dev\"}, {\"id\": 2, \"name\": \"product\"}]}'
         mockGet.return_value = response
 
         api = Api()
@@ -91,7 +91,7 @@ class TestApi(TestCase):
     def test_get_product_not_found(self, mockNewProduct, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 0}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 1, \"name\": \"product_dev\"}, {\"id\": 2, \"name\": \"product_prod\"}]}'
         mockGet.return_value = response
         mockNewProduct.return_value = self.product_id
 
@@ -133,7 +133,7 @@ class TestApi(TestCase):
     def test_get_engagement_found(self, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 1, \"results\": [{\"id\": 3}]}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 2, \"name\": \"engagement_dev\"}, {\"id\": 3, \"name\": \"engagement\"}]}'
         mockGet.return_value = response
 
         api = Api()
@@ -154,7 +154,7 @@ class TestApi(TestCase):
     def test_get_engagement_not_found(self, mockNewEngagement, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 0}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 2, \"name\": \"engagement_dev\"}, {\"id\": 3, \"name\": \"engagement_prod\"}]}'
         mockGet.return_value = response
         mockNewEngagement.return_value = self.engagement_id
 
@@ -234,7 +234,7 @@ class TestApi(TestCase):
     def test_get_test_found(self, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 1, \"results\": [{\"id\": 4}]}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 2}, {\"id\": 3, \"title\": \"test_dev\"}, {\"id\": 4, \"title\": \"test\"}]}'
         mockGet.return_value = response
 
         api = Api()
@@ -255,7 +255,7 @@ class TestApi(TestCase):
     def test_get_test_not_found(self, mockNewTest, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 0}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 2}, {\"id\": 3, \"title\": \"test_dev\"}, {\"id\": 4, \"title\": \"test_prod\"}]}'
         mockGet.return_value = response
         mockNewTest.return_value = self.test_id
 
@@ -307,7 +307,7 @@ class TestApi(TestCase):
     def test_get_test_type_found(self, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 1, \"results\": [{\"id\": 5}]}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 4, \"name\": \"test_type_dev\"}, {\"id\": 5, \"name\": \"test_type\"}]}'
         mockGet.return_value = response
 
         api = Api()
@@ -327,7 +327,7 @@ class TestApi(TestCase):
     def test_get_test_type_not_found(self, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 0}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 4, \"name\": \"test_type_dev\"}, {\"id\": 5, \"name\": \"test_type_prod\"}]}'
         mockGet.return_value = response
 
         with self.assertRaises(Exception) as cm:
