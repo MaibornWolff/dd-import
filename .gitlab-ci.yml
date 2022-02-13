@@ -31,7 +31,7 @@ trivy:
     - wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
   allow_failure: true
   script:
-    - ./trivy -f json -o trivy.json "$DOCKER_ARTIFACT_URL"
+    - ./trivy image --no-progress -f json -o trivy.json "$DOCKER_ARTIFACT_URL"
   artifacts:
     paths:
     - trivy.json
