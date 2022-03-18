@@ -1,4 +1,4 @@
-FROM python:3.10.2-alpine@sha256:9f107fb8f0d64669f3cc857dd3b62e7f3b72e70b91a8f055868f1d0bad09cb84
+FROM python:3.10.3-alpine@sha256:7099d74f22c2d7a597875c3084e840846ca294ad01da1e845b0154100a6ac15b
 
 ARG user=ddimport
 ARG group=ddimport
