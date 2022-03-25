@@ -1,5 +1,5 @@
 import os
-
+from distutils.util import strtobool
 
 class Environment:
 
@@ -23,7 +23,7 @@ class Environment:
         self.build_id = os.getenv('DD_BUILD_ID', None)
         self.commit_hash = os.getenv('DD_COMMIT_HASH', None)
         self.branch_tag = os.getenv('DD_BRANCH_TAG', None)
-        self.ssl_verification = os.getenv('DD_SSL_VERIFY', True)
+        self.ssl_verification = bool(strtobool(os.getenv('DD_SSL_VERIFY', True)))
 
     def check_environment_reimport_findings(self):
         error_string = self.check_environment_common()
