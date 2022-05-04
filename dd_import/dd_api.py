@@ -95,7 +95,7 @@ class Api:
     def update_engagement(self, engagement):
         if self.environment.build_id is not None or \
            self.environment.commit_hash is not None or \
-           self.environment.commit_hash is not None:
+           self.environment.branch_tag is not None:
             payload = {'build_id': self.environment.build_id,
                        'commit_hash': self.environment.commit_hash,
                        'branch_tag': self.environment.branch_tag}
