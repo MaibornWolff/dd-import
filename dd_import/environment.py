@@ -23,6 +23,7 @@ class Environment:
         self.build_id = os.getenv('DD_BUILD_ID', None)
         self.commit_hash = os.getenv('DD_COMMIT_HASH', None)
         self.branch_tag = os.getenv('DD_BRANCH_TAG', None)
+        self.api_scan_config = os.getenv('DD_SCAN_CONFIG_ID', None)
 
     def check_environment_reimport_findings(self):
         error_string = self.check_environment_common()
@@ -60,6 +61,7 @@ class Environment:
         print('DD_BUILD_ID:           ', self.build_id)
         print('DD_COMMIT_HASH:        ', self.commit_hash)
         print('DD_BRANCH_TAG:         ', self.branch_tag)
+        print('DD_SCAN_CONFIG_ID:     ', self.api_scan_config)
         print('')
 
     def check_environment_languages(self):
