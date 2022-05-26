@@ -1,6 +1,11 @@
 import datetime
 import json
 import requests
+from urllib3.exceptions import InsecureRequestWarning
+from urllib3 import disable_warnings
+
+# Disable SSL Warnings
+disable_warnings(InsecureRequestWarning)
 
 from dd_import.environment import Environment
 
@@ -20,12 +25,14 @@ class Api:
         self.test_type_url = self.environment.url + '/api/v2/test_types/'
         self.reimport_scan_url = self.environment.url + '/api/v2/reimport-scan/'
         self.import_languages_url = self.environment.url + '/api/v2/import-languages/'
+        self.ssl_verification = self.environment.ssl_verification
 
     def get_product_type(self):
         payload = {'name': self.environment.product_type_name}
         r = requests.get(self.product_type_url,
                          headers=self.headers,
-                         params=payload)
+                         params=payload,
+                         verify=self.ssl_verification)
         r.raise_for_status()
         product_type_data = json.loads(r.text)
         for product_type in product_type_data.get('results', []):
@@ -40,7 +47,8 @@ class Api:
                    'prod_type': product_type}
         r = requests.get(self.product_url,
                          headers=self.headers,
-                         params=payload)
+                         params=payload,
+                         verify=self.ssl_verification)
         r.raise_for_status()
         product_data = json.loads(r.text)
         for product in product_data.get('results', []):
@@ -56,7 +64,8 @@ class Api:
                    'prod_type': product_type}
         r = requests.post(self.product_url,
                           headers=self.headers,
-                          data=json.dumps(payload))
+                          data=json.dumps(payload),
+                          verify=self.ssl_verification)
         r.raise_for_status()
         product_data = json.loads(r.text)
         print('New product,        id: ', product_data['id'])
@@ -67,7 +76,8 @@ class Api:
                    'product': product}
         r = requests.get(self.engagement_url,
                          headers=self.headers,
-                         params=payload)
+                         params=payload,
+                         verify=self.ssl_verification)
         r.raise_for_status()
         engagement_data = json.loads(r.text)
         for engagement in engagement_data.get('results', []):
@@ -86,7 +96,8 @@ class Api:
                    'status': 'In Progress'}
         r = requests.post(self.engagement_url,
                           headers=self.headers,
-                          data=json.dumps(payload))
+                          data=json.dumps(payload),
+                          verify=self.ssl_verification)
         r.raise_for_status()
         engagement_data = json.loads(r.text)
         print('New engagement,     id: ', engagement_data['id'])
@@ -101,7 +112,8 @@ class Api:
                        'branch_tag': self.environment.branch_tag}
             r = requests.patch(self.engagement_url + str(engagement) + '/',
                                headers=self.headers,
-                               data=json.dumps(payload))
+                               data=json.dumps(payload),
+                               verify=self.ssl_verification)
             r.raise_for_status()
 
     def get_test(self, engagement):
@@ -109,7 +121,8 @@ class Api:
                    'engagement': engagement}
         r = requests.get(self.test_url,
                          headers=self.headers,
-                         params=payload)
+                         params=payload,
+                         verify=self.ssl_verification)
         r.raise_for_status()
         test_data = json.loads(r.text)
         for test in test_data.get('results', []):
@@ -130,7 +143,8 @@ class Api:
                    'test_type': self.get_test_type()}
         r = requests.post(self.test_url,
                           headers=self.headers,
-                          data=json.dumps(payload))
+                          data=json.dumps(payload),
+                          verify=self.ssl_verification)
         r.raise_for_status()
         test_data = json.loads(r.text)
         print('New test,           id: ', test_data['id'])
@@ -140,7 +154,8 @@ class Api:
         payload = {'name': self.environment.test_type_name}
         r = requests.get(self.test_type_url,
                          headers=self.headers,
-                         params=payload)
+                         params=payload,
+                         verify=self.ssl_verification)
         r.raise_for_status()
         test_type_data = json.loads(r.text)
         for test_type in test_type_data.get('results', []):
@@ -173,11 +188,13 @@ class Api:
             response = requests.post(self.reimport_scan_url,
                                      headers=self.headers_without_json,
                                      data=payload,
-                                     files=files)
+                                     files=files,
+                                     verify=self.ssl_verification)
         else:
             response = requests.post(self.reimport_scan_url,
                                      headers=self.headers_without_json,
-                                     data=payload)
+                                     data=payload,
+                                     verify=self.ssl_verification)
 
         response.raise_for_status()
 
@@ -193,7 +210,8 @@ class Api:
         response = requests.post(self.import_languages_url,
                                  headers=self.headers_without_json,
                                  data=payload,
-                                 files=files)
+                                 files=files,
+                                 verify=self.ssl_verification)
         response.raise_for_status()
 
         print()
