@@ -37,7 +37,7 @@ class TestEnvironment(TestCase):
                                'DD_BUILD_ID': 'build_id',
                                'DD_COMMIT_HASH': 'commit_hash',
                                'DD_BRANCH_TAG': 'branch_tag',
-                               'DD_API_SCAN_CONFIGURATION_ID': 'api_scan_configuration_id'})
+                               'DD_API_SCAN_CONFIGURATION_ID': 'api_scan_configuration_id',
                                'DD_SSL_VERIFY': 'false'})
     def test_check_environment_reimport_findings_complete(self):
 
