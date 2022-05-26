@@ -2,9 +2,8 @@ import datetime
 import json
 from unittest import TestCase
 from unittest.mock import Mock, patch
-from regex import F
 from requests.models import Response
-from rsa import verify
+
 
 from dd_import.dd_api import Api
 
