@@ -1,13 +1,14 @@
 import datetime
 import json
+
 import requests
-from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
+from urllib3.exceptions import InsecureRequestWarning
+
+from dd_import.environment import Environment
 
 # Disable SSL Warnings
 disable_warnings(InsecureRequestWarning)
-
-from dd_import.environment import Environment
 
 
 class Api:
