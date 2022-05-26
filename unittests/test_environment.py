@@ -36,7 +36,8 @@ class TestEnvironment(TestCase):
                                'DD_SERVICE': 'service',
                                'DD_BUILD_ID': 'build_id',
                                'DD_COMMIT_HASH': 'commit_hash',
-                               'DD_BRANCH_TAG': 'branch_tag'})
+                               'DD_BRANCH_TAG': 'branch_tag',
+                               'DD_API_SCAN_CONFIGURATION_ID': 'api_scan_configuration_id'})
     def test_check_environment_reimport_findings_complete(self):
 
         environment = Environment()
@@ -62,6 +63,7 @@ class TestEnvironment(TestCase):
         self.assertEqual(environment.build_id, 'build_id')
         self.assertEqual(environment.commit_hash, 'commit_hash')
         self.assertEqual(environment.branch_tag, 'branch_tag')
+        self.assertEqual(environment.api_scan_configuration_id, 'api_scan_configuration_id')
 
     def test_check_environment_languages_empty(self):
         with self.assertRaises(Exception) as cm:
