@@ -73,7 +73,7 @@ All parameters need to be provided as environment variables
 | DD_BUILD_ID           | Optional           | -                | |
 | DD_COMMIT_HASH        | Optional           | -                | |
 | DD_BRANCH_TAG         | Optional           | -                | |
-| DD_SSL_VERIFY         | Optional           |                  | Set SSL Verification option. Set to `False` or `0` to disable ssl verification. Defult `True` |
+| DD_SSL_VERIFY         | Optional           |                  | Disable SSL verification by setting to `false` or `0`. Default `true` |
 
 ### Usage
 

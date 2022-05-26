@@ -36,7 +36,8 @@ class TestEnvironment(TestCase):
                                'DD_SERVICE': 'service',
                                'DD_BUILD_ID': 'build_id',
                                'DD_COMMIT_HASH': 'commit_hash',
-                               'DD_BRANCH_TAG': 'branch_tag'})
+                               'DD_BRANCH_TAG': 'branch_tag',
+                               'DD_SSL_VERIFY': 'false'})
     def test_check_environment_reimport_findings_complete(self):
 
         environment = Environment()
@@ -62,6 +63,7 @@ class TestEnvironment(TestCase):
         self.assertEqual(environment.build_id, 'build_id')
         self.assertEqual(environment.commit_hash, 'commit_hash')
         self.assertEqual(environment.branch_tag, 'branch_tag')
+        self.assertEqual(environment.ssl_verification, False)
 
     def test_check_environment_languages_empty(self):
         with self.assertRaises(Exception) as cm:
@@ -77,7 +79,8 @@ class TestEnvironment(TestCase):
                                'DD_API_KEY': 'api_key',
                                'DD_PRODUCT_TYPE_NAME': 'product_type',
                                'DD_PRODUCT_NAME': 'product',
-                               'DD_FILE_NAME': 'file_name'})
+                               'DD_FILE_NAME': 'file_name',
+                               'DD_SSL_VERIFY': 'true'})
     def test_check_environment_languages_complete(self):
 
         environment = Environment()
@@ -88,3 +91,4 @@ class TestEnvironment(TestCase):
         self.assertEqual(environment.product_type_name, 'product_type')
         self.assertEqual(environment.product_name, 'product')
         self.assertEqual(environment.file_name, 'file_name')
+        self.assertEqual(environment.ssl_verification, True)

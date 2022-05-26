@@ -23,7 +23,7 @@ class Environment:
         self.build_id = os.getenv('DD_BUILD_ID', None)
         self.commit_hash = os.getenv('DD_COMMIT_HASH', None)
         self.branch_tag = os.getenv('DD_BRANCH_TAG', None)
-        self.ssl_verification = bool(strtobool(os.getenv('DD_SSL_VERIFY', True)))
+        self.ssl_verification = bool(strtobool(os.getenv('DD_SSL_VERIFY', 'true')))
 
     def check_environment_reimport_findings(self):
         error_string = self.check_environment_common()
@@ -79,6 +79,7 @@ class Environment:
         print('DD_PRODUCT_TYPE_NAME:  ', self.product_type_name)
         print('DD_PRODUCT_NAME:       ', self.product_name)
         print('DD_FILE_NAME:          ', self.file_name)
+        print('DD_SSL_VERIFY:         ', self.ssl_verification)
         print('')
 
     def check_environment_common(self):
