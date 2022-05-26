@@ -180,6 +180,8 @@ class Api:
             payload['endpoint_to_add'] = int(self.environment.endpoint_id)
         if self.environment.service is not None:
             payload['service'] = self.environment.service
+        if self.environment.api_scan_configuration_id is not None:
+            payload['api_scan_configuration'] = self.environment.api_scan_configuration_id
 
         if self.environment.file_name is not None:
             files = {'file': (self.environment.file_name,
