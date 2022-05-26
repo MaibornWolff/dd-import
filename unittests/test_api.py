@@ -2,7 +2,9 @@ import datetime
 import json
 from unittest import TestCase
 from unittest.mock import Mock, patch
+from regex import F
 from requests.models import Response
+from rsa import verify
 
 from dd_import.dd_api import Api
 
@@ -38,7 +40,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.product_type_id)
         url = 'https://example.com/api/v2/product_types/'
         payload = {'name': 'product_type'}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -59,7 +61,7 @@ class TestApi(TestCase):
         self.assertEqual('Product type product_type not found', str(cm.exception))
         url = 'https://example.com/api/v2/product_types/'
         payload = {'name': 'product_type'}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -79,7 +81,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.product_id)
         url = 'https://example.com/api/v2/products/'
         payload = {'name': 'product', 'prod_type': self.product_type_id}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -101,7 +103,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.product_id)
         url = 'https://example.com/api/v2/products/'
         payload = {'name': 'product', 'prod_type': self.product_type_id}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         mockNewProduct.assert_called_once_with(self.product_type_id)
         response.raise_for_status.assert_called_once()
 
@@ -122,7 +124,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.product_id)
         url = 'https://example.com/api/v2/products/'
         payload = '{"name": "product", "description": "product", "prod_type": 1}'
-        mockPost.assert_called_once_with(url, headers=self.header, data=payload)
+        mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -142,7 +144,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.engagement_id)
         url = 'https://example.com/api/v2/engagements/'
         payload = {'name': 'engagement', 'product': self.product_id}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -164,7 +166,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.engagement_id)
         url = 'https://example.com/api/v2/engagements/'
         payload = {'name': 'engagement', 'product': self.product_id}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         mockNewEngagement.assert_called_once_with(self.product_id)
         response.raise_for_status.assert_called_once()
 
@@ -186,7 +188,7 @@ class TestApi(TestCase):
         today = datetime.date.today().isoformat()
         url = 'https://example.com/api/v2/engagements/'
         payload = f'{{"name": "engagement", "product": 2, "target_start": "{today}", "target_end": "2999-12-31", "engagement_type": "CI/CD", "status": "In Progress"}}'
-        mockPost.assert_called_once_with(url, headers=self.header, data=payload)
+        mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -223,7 +225,7 @@ class TestApi(TestCase):
 
         url = 'https://example.com/api/v2/engagements/3/'
         payload = '{"build_id": "build_id", "commit_hash": "commit_hash", "branch_tag": "branch_tag"}'
-        mockPatch.assert_called_once_with(url, headers=self.header, data=payload)
+        mockPatch.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -243,7 +245,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.test_id)
         url = 'https://example.com/api/v2/tests/'
         payload = {'title': 'test', 'engagement': self.engagement_id}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -265,7 +267,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.test_id)
         url = 'https://example.com/api/v2/tests/'
         payload = {'title': 'test', 'engagement': self.engagement_id}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         mockNewTest.assert_called_once_with(self.engagement_id)
         response.raise_for_status.assert_called_once()
 
@@ -296,7 +298,7 @@ class TestApi(TestCase):
                    .fromisoformat('2999-12-31').isoformat(),
                    'test_type': self.test_type_id}
         payload = json.dumps(payload)
-        mockPost.assert_called_once_with(url, headers=self.header, data=payload)
+        mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -316,7 +318,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.test_type_id)
         url = 'https://example.com/api/v2/test_types/'
         payload = {'name': 'test_type'}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -337,7 +339,7 @@ class TestApi(TestCase):
         self.assertEqual('Test type test_type not found', str(cm.exception))
         url = 'https://example.com/api/v2/test_types/'
         payload = {'name': 'test_type'}
-        mockGet.assert_called_once_with(url, headers=self.header, params=payload)
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -374,7 +376,7 @@ class TestApi(TestCase):
                    'endpoint_to_add': 6,
                    'service': 'service'
                    }
-        mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload)
+        mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -407,7 +409,7 @@ class TestApi(TestCase):
                    'close_old_findings': False
                    }
         files = {'file': ('file_name', 'file_open', 'application/json', {'Expires': '0'})}
-        mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload, files=files)
+        mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload, files=files, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')
@@ -428,5 +430,5 @@ class TestApi(TestCase):
         url = 'https://example.com/api/v2/import-languages/'
         payload = {'product': self.product_id}
         files = {'file': ('file_name', 'file_open', 'application/json', {'Expires': '0'})}
-        mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload, files=files)
+        mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload, files=files, verify=True)
         response.raise_for_status.assert_called_once()

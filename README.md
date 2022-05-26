@@ -74,6 +74,7 @@ All parameters need to be provided as environment variables
 | DD_COMMIT_HASH        | Optional           | -                | |
 | DD_BRANCH_TAG         | Optional           | -                | |
 | DD_API_SCAN_CONFIGURATION_ID | Optional    | -                | Id of the API scan configuration for API based parsers, e.g. SonarQube |
+| DD_SSL_VERIFY         | Optional           |                  | Disable SSL verification by setting to `false` or `0`. Default `true` |
 
 ### Usage
 

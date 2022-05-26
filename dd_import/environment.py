@@ -1,5 +1,5 @@
 import os
-
+from distutils.util import strtobool
 
 class Environment:
 
@@ -24,6 +24,7 @@ class Environment:
         self.commit_hash = os.getenv('DD_COMMIT_HASH', None)
         self.branch_tag = os.getenv('DD_BRANCH_TAG', None)
         self.api_scan_configuration_id = os.getenv('DD_API_SCAN_CONFIGURATION_ID', None)
+        self.ssl_verification = bool(strtobool(os.getenv('DD_SSL_VERIFY', 'true')))
 
     def check_environment_reimport_findings(self):
         error_string = self.check_environment_common()
@@ -62,6 +63,7 @@ class Environment:
         print('DD_COMMIT_HASH:               ', self.commit_hash)
         print('DD_BRANCH_TAG:                ', self.branch_tag)
         print('DD_API_SCAN_CONFIGURATION_ID: ', self.api_scan_configuration_id)
+        print('DD_SSL_VERIFY:                ', self.ssl_verification)
         print('')
 
     def check_environment_languages(self):
@@ -79,6 +81,7 @@ class Environment:
         print('DD_PRODUCT_TYPE_NAME:  ', self.product_type_name)
         print('DD_PRODUCT_NAME:       ', self.product_name)
         print('DD_FILE_NAME:          ', self.file_name)
+        print('DD_SSL_VERIFY:         ', self.ssl_verification)
         print('')
 
     def check_environment_common(self):
