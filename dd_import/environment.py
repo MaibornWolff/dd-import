@@ -1,6 +1,7 @@
 import os
 from distutils.util import strtobool
 
+
 class Environment:
 
     def __init__(self):
