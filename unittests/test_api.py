@@ -2,8 +2,8 @@ import datetime
 import json
 from unittest import TestCase
 from unittest.mock import Mock, patch
-from requests.models import Response
 
+from requests.models import Response
 
 from dd_import.dd_api import Api
 
@@ -375,7 +375,8 @@ class TestApi(TestCase):
                    'endpoint_to_add': 6,
                    'service': 'service'
                    }
-        mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload, verify=True)
+        files = {}
+        mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload, files=files, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')

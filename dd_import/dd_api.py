@@ -10,12 +10,15 @@ from dd_import.environment import Environment
 # Disable SSL Warnings
 disable_warnings(InsecureRequestWarning)
 
+
 # Fix for reimport without file, see https://github.com/psf/requests/issues/1081#issuecomment-428504128
 class ForceMultipartDict(dict):
     def __bool__(self):
         return True
 
-FORCE_MULTIPART = ForceMultipartDict()  # An empty dict that boolean-evaluates as `True`.        
+
+FORCE_MULTIPART = ForceMultipartDict()  # An empty dict that boolean-evaluates as `True`.
+
 
 class Api:
 
@@ -181,7 +184,7 @@ class Api:
                    }
         if self.environment.minimum_severity is not None:
             payload['minimum_severity'] = self.environment.minimum_severity
-        if self.environment.group_by is not none:
+        if self.environment.group_by is not None:
             payload['group_by'] = self.environment.group_by
         if self.environment.version is not None:
             payload['version'] = self.environment.version
