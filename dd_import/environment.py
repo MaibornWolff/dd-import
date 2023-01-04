@@ -16,6 +16,7 @@ class Environment:
         self.active = os.getenv('DD_ACTIVE', 'True').lower() in ['true']
         self.verified = os.getenv('DD_VERIFIED', 'True').lower() in ['true']
         self.minimum_severity = os.getenv('DD_MINIMUM_SEVERITY', None)
+        self.group_by = os.getenv('DD_GROUP_BY', None)
         self.push_to_jira = os.getenv('DD_PUSH_TO_JIRA', 'False').lower() in ['true']
         self.close_old_findings = os.getenv('DD_CLOSE_OLD_FINDINGS', 'True').lower() in ['true']
         self.version = os.getenv('DD_VERSION', None)
@@ -55,6 +56,7 @@ class Environment:
         print('DD_ACTIVE:                    ', self.active)
         print('DD_VERIFIED:                  ', self.verified)
         print('DD_MINIMUM_SEVERITY:          ', self.minimum_severity)
+        print('DD_GROUP_BY:                  ', self.group_by)
         print('DD_PUSH_TO_JIRA:              ', self.push_to_jira)
         print('DD_CLOSE_OLD_FINDINGS:        ', self.close_old_findings)
         print('DD_VERSION:                   ', self.version)

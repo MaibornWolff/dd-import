@@ -29,6 +29,7 @@ class TestEnvironment(TestCase):
                                'DD_ACTIVE': 'False',
                                'DD_VERIFIED': 'False',
                                'DD_MINIMUM_SEVERITY': 'minimum_severity',
+                               'DD_GROUP_BY': 'group_by'
                                'DD_PUSH_TO_JIRA': 'True',
                                'DD_CLOSE_OLD_FINDINGS': 'False',
                                'DD_VERSION': 'version',
@@ -56,6 +57,7 @@ class TestEnvironment(TestCase):
         self.assertFalse(environment.active)
         self.assertFalse(environment.verified)
         self.assertEqual(environment.minimum_severity, 'minimum_severity')
+        self.assertEqual(environment.group_by, 'group_by')
         self.assertTrue(environment.push_to_jira)
         self.assertFalse(environment.close_old_findings)
         self.assertEqual(environment.version, 'version')
