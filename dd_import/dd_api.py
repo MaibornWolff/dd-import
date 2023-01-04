@@ -10,6 +10,12 @@ from dd_import.environment import Environment
 # Disable SSL Warnings
 disable_warnings(InsecureRequestWarning)
 
+# Fix for reimport without file, see https://github.com/psf/requests/issues/1081#issuecomment-428504128
+class ForceMultipartDict(dict):
+    def __bool__(self):
+        return True
+
+FORCE_MULTIPART = ForceMultipartDict()  # An empty dict that boolean-evaluates as `True`.        
 
 class Api:
 
@@ -197,6 +203,7 @@ class Api:
             response = requests.post(self.reimport_scan_url,
                                      headers=self.headers_without_json,
                                      data=payload,
+                                     files=FORCE_MULTIPART,
                                      verify=self.ssl_verification)
 
         response.raise_for_status()
