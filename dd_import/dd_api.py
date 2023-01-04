@@ -181,6 +181,8 @@ class Api:
                    }
         if self.environment.minimum_severity is not None:
             payload['minimum_severity'] = self.environment.minimum_severity
+        if self.environment.group_by is not none:
+            payload['group_by'] = self.environment.group_by
         if self.environment.version is not None:
             payload['version'] = self.environment.version
         if self.environment.endpoint_id is not None:

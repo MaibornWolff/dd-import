@@ -65,6 +65,7 @@ All parameters need to be provided as environment variables
 | DD_ACTIVE             | Optional           | -                | Default: `true` |
 | DD_VERIFIED           | Optional           | -                | Default: `true` |
 | DD_MINIMUM_SEVERITY   | Optional           | -                | |
+| DD_GROUP_BY           | Optional           | -                | Group by file path, component name, component name + version |
 | DD_PUSH_TO_JIRA       | Optional           | -                | Default: `false` |
 | DD_CLOSE_OLD_FINDINGS | Optional           | -                | Default: `true` |
 | DD_VERSION            | Optional           | -                | |
