@@ -1,0 +1,15 @@
+name: Vulnerability checks
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run Bandit vulnerability scanner
+        uses: StefanFl/secobserve_github_actions/SAST/bandit@main
+        with:
+          TARGET: 'dd_import'
+          REPORT_NAME: 'dd_import_bandit.sarif'
