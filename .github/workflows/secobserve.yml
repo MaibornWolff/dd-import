@@ -13,3 +13,8 @@ jobs:
         with:
           target: 'dd_import'
           report_name: 'dd_import_bandit.sarif'
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: secobserve
+          path: dd_import_bandit.sarif
