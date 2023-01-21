@@ -11,5 +11,5 @@ jobs:
       - name: Run Bandit vulnerability scanner
         uses: StefanFl/secobserve_github_actions/SAST/bandit@main
         with:
-          TARGET: 'dd_import'
-          REPORT_NAME: 'dd_import_bandit.sarif'
+          target: 'dd_import'
+          report_name: 'dd_import_bandit.sarif'
