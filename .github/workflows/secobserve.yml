@@ -13,8 +13,16 @@ jobs:
         with:
           target: 'dd_import'
           report_name: 'dd_import_bandit.sarif'
+      - name: Run Semgrep vulnerability scanner
+        uses: StefanFl/secobserve_github_actions/SAST/semgrep@main
+        with:
+          target: 'backend'
+          report_name: 'semgrep_backend.json'
+          configuration: 'r/python'
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
           name: secobserve
-          path: dd_import_bandit.sarif
+          path: |
+            dd_import_bandit.sarif
+            semgrep_backend.json
