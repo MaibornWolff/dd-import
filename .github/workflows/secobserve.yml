@@ -8,17 +8,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Run Bandit vulnerability scanner
+      - name: Run Bandit
         uses: StefanFl/secobserve_github_actions/SAST/bandit@main
         with:
           target: 'dd_import'
           report_name: 'dd_import_bandit.sarif'
-      - name: Run Semgrep vulnerability scanner
+      - name: Run Semgrep
         uses: StefanFl/secobserve_github_actions/SAST/semgrep@main
         with:
           target: 'dd_import'
           report_name: 'dd_import_semgrep.json'
           configuration: 'r/python'
+      - name: Run KICS
+        uses: StefanFl/secobserve_github_actions/SAST/kics@main
+        with:
+          target: '.'
+          report_name: 'dd_import_kiks.sarif'
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
@@ -26,3 +31,4 @@ jobs:
           path: |
             dd_import_bandit.sarif
             dd_import_semgrep.json
+            dd_import_kiks.sarif
