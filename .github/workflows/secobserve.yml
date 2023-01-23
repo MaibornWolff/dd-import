@@ -38,6 +38,11 @@ jobs:
         uses: StefanFl/secobserve_github_actions/secrets/gitleaks@main
         with:
           report_name: 'dd_import_gitleaks.sarif'
+      - name: Run DrHeader
+        uses: StefanFl/secobserve_github_actions/communication/drheader@main
+        with:
+          target: 'https://demo.defectdojo.org'
+          report_name: 'dd_import_drheader.json'
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
@@ -49,3 +54,4 @@ jobs:
             dd_import_checkov.sarif
             dd_import_trivy_image.json
             dd_import_gitleaks.sarif
+            dd_import_drheader.json
