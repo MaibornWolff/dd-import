@@ -16,8 +16,8 @@ jobs:
       - name: Run Semgrep vulnerability scanner
         uses: StefanFl/secobserve_github_actions/SAST/semgrep@main
         with:
-          target: 'backend'
-          report_name: 'semgrep_backend.json'
+          target: 'dd_import'
+          report_name: 'dd_import_semgrep.json'
           configuration: 'r/python'
       - name: Upload results
         uses: actions/upload-artifact@v3
@@ -25,4 +25,4 @@ jobs:
           name: secobserve
           path: |
             dd_import_bandit.sarif
-            semgrep_backend.json
+            dd_import_semgrep.json
