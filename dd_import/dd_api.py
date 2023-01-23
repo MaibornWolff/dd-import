@@ -100,8 +100,8 @@ class Api:
     def new_engagement(self, product):
         payload = {'name': self.environment.engagement_name,
                    'product': product,
-                   'target_start': datetime.date.today().isoformat(),
-                   'target_end': '2999-12-31',
+                   'target_start': self.environment.engagement_target_start,
+                   'target_end': self.environment.engagement_target_stop,
                    'engagement_type': 'CI/CD',
                    'status': 'In Progress'}
         r = requests.post(self.engagement_url,
