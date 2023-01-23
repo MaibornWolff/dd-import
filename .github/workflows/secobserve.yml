@@ -29,6 +29,11 @@ jobs:
         with:
           target: '.'
           report_name: 'dd_import_checkov.sarif'
+      - name: Run Trivy image
+        uses: StefanFl/secobserve_github_actions/SCA/trivy_image@main
+        with:
+          target: 'maibornwolff/dd-import:latest'
+          report_name: 'dd_import_trivy_image.json'
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
@@ -38,3 +43,4 @@ jobs:
             dd_import_semgrep.json
             dd_import_kics.sarif
             dd_import_checkov.sarif
+            dd_import_trivy_image.json
