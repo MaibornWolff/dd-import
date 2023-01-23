@@ -43,6 +43,11 @@ jobs:
         with:
           target: 'https://demo.defectdojo.org'
           report_name: 'dd_import_drheader.json'
+      - name: Run SSLyze
+        uses: StefanFl/secobserve_github_actions/communication/sslyze@main
+        with:
+          target: 'demo.defectdojo.org'
+          report_name: 'dd_import_sslyze.json'
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
@@ -55,3 +60,4 @@ jobs:
             dd_import_trivy_image.json
             dd_import_gitleaks.sarif
             dd_import_drheader.json
+            dd_import_sslyze.json
