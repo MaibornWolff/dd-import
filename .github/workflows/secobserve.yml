@@ -23,7 +23,7 @@ jobs:
         uses: StefanFl/secobserve_github_actions/SAST/kics@main
         with:
           target: '.'
-          report_name: 'dd_import_kiks.sarif'
+          report_name: 'dd_import_kics.sarif'
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
@@ -31,4 +31,4 @@ jobs:
           path: |
             dd_import_bandit.sarif
             dd_import_semgrep.json
-            dd_import_kiks.sarif
+            dd_import_kics.sarif
