@@ -24,6 +24,11 @@ jobs:
         with:
           target: '.'
           report_name: 'dd_import_kics.sarif'
+      - name: Run Checkov
+        uses: StefanFl/secobserve_github_actions/SAST/checkov@main
+        with:
+          target: '.'
+          report_name: 'dd_import_checkov.sarif'
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
@@ -32,3 +37,4 @@ jobs:
             dd_import_bandit.sarif
             dd_import_semgrep.json
             dd_import_kics.sarif
+            dd_import_checkov.sarif
