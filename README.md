@@ -22,7 +22,7 @@ Findings and languages can be imported into DefectDojo via an [API](https://defe
 pip install dd-import
 ```
 
-The command `dd-reimport-findings` re-imports findings into DefectDojo. Even though the name suggests otherwise, you do not need to do an initial import first. 
+The command `dd-reimport-findings` re-imports findings into DefectDojo. Even though the name suggests otherwise, you do not need to do an initial import first.
 
 The command `dd-import-languages` imports languages data that have been gathered with the tool [cloc](https://github.com/AlDanial/cloc), see [Languages and lines of code](https://defectdojo.github.io/django-DefectDojo/integrations/languages/) for more details.
 
@@ -31,7 +31,7 @@ The command `dd-import-languages` imports languages data that have been gathered
 
 Docker images can be found in https://hub.docker.com/r/maibornwolff/dd-import.
 
-A re-import of findings can be started with 
+A re-import of findings can be started with
 
 ```bash
 docker run --rm dd-import:latest dd-reimport-findings.sh
@@ -60,7 +60,7 @@ All parameters need to be provided as environment variables
 | DD_PRODUCT_NAME       | Mandatory          | Mandatory        | If a product with this name does not exist, it will be created |
 | DD_ENGAGEMENT_NAME    | Mandatory          | -                | If an engagement with this name does not exist for the given product, it will be created |
 | DD_TEST_NAME          | Mandatory          | -                | If a test with this name does not exist for the given engagement, it will be created |
-| DD_TEST_TYPE_NAME     | Mandatory          | -                | From DefectDojo's list of test types, eg. `Trivy Scan` | 
+| DD_TEST_TYPE_NAME     | Mandatory          | -                | From DefectDojo's list of test types, eg. `Trivy Scan` |
 | DD_FILE_NAME          | Optional           | Mandatory        | |
 | DD_ACTIVE             | Optional           | -                | Default: `true` |
 | DD_VERIFIED           | Optional           | -                | Default: `true` |
@@ -76,6 +76,8 @@ All parameters need to be provided as environment variables
 | DD_BRANCH_TAG         | Optional           | -                | |
 | DD_API_SCAN_CONFIGURATION_ID | Optional    | -                | Id of the API scan configuration for API based parsers, e.g. SonarQube |
 | DD_SSL_VERIFY         | Optional           | Optional         | Disable SSL verification by setting to `false` or `0`. Default: `true` |
+| DD_ENGAGEMENT_TARGET_START | Optional    | -                | Default: `Today` If an engagement doesn't exist the target start date for it |
+| DD_ENGAGEMENT_TARGET_STOP | Optional    | -                | Default: `2999-12-31` If an engagement doesn't exist the target stop date for it |
 
 ### Usage
 
@@ -163,7 +165,7 @@ Another example, showing how to use `dd-import` within a GitHub Action, can be f
 
 ### Testing
 
-`./bin/runUnitTests.sh` - Runs the unit tests and reports the test coverage. 
+`./bin/runUnitTests.sh` - Runs the unit tests and reports the test coverage.
 
 `./bin/runDockerUnitTests.sh` - First creates the docker image and then starts a docker container in which the unit tests are executed.
 
