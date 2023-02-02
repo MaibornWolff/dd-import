@@ -1,7 +1,7 @@
 
 variables:
-  DOCKER_ARTIFACT_URL: "maibornwolff/dd-import:1.0.7"
-  DD_PRODUCT_TYPE_NAME: "Showcase"
+  DOCKER_ARTIFACT_URL: "maibornwolff/dd-import:latest"
+  DD_PRODUCT_TYPE_NAME: "Research and Development"
   DD_PRODUCT_NAME: "DefectDojo Importer"
   DD_ENGAGEMENT_NAME: "GitLab"
 
