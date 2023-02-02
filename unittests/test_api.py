@@ -208,7 +208,7 @@ class TestApi(TestCase):
 
         self.assertEqual(id, self.engagement_id)
         url = 'https://example.com/api/v2/engagements/'
-        payload = f'{{"name": "engagement", "product": 2, "target_start": "2023-02-01", "target_end": "2023-02-28", "engagement_type": "CI/CD", "status": "In Progress"}}'
+        payload = '{{"name": "engagement", "product": 2, "target_start": "2023-02-01", "target_end": "2023-02-28", "engagement_type": "CI/CD", "status": "In Progress"}}'
         mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
