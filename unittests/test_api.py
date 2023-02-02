@@ -174,7 +174,7 @@ class TestApi(TestCase):
     @patch.dict('os.environ', {'DD_URL': 'https://example.com',
                                'DD_API_KEY': 'api_key',
                                'DD_ENGAGEMENT_NAME': 'engagement'})
-    def test_new_engagement(self, mockPost, mockEnv):
+    def test_new_engagement_without_target(self, mockPost, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
         response.text = '{\"id\": 3}'
@@ -187,6 +187,28 @@ class TestApi(TestCase):
         today = datetime.date.today().isoformat()
         url = 'https://example.com/api/v2/engagements/'
         payload = f'{{"name": "engagement", "product": 2, "target_start": "{today}", "target_end": "2999-12-31", "engagement_type": "CI/CD", "status": "In Progress"}}'
+        mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
+        response.raise_for_status.assert_called_once()
+
+    @patch('dd_import.environment.Environment')
+    @patch('requests.post')
+    @patch.dict('os.environ', {'DD_URL': 'https://example.com',
+                               'DD_API_KEY': 'api_key',
+                               'DD_ENGAGEMENT_NAME': 'engagement',
+                               'DD_ENGAGEMENT_TARGET_START': '2023-02-01',
+                               'DD_ENGAGEMENT_TARGET_END': '2023-02-28'})
+    def test_new_engagement_with_target(self, mockPost, mockEnv):
+        response = Mock(spec=Response)
+        response.status_code = 200
+        response.text = '{\"id\": 3}'
+        mockPost.return_value = response
+
+        api = Api()
+        id = api.new_engagement(self.product_id)
+
+        self.assertEqual(id, self.engagement_id)
+        url = 'https://example.com/api/v2/engagements/'
+        payload = f'{{"name": "engagement", "product": 2, "target_start": "2023-02-01", "target_end": "2023-02-28", "engagement_type": "CI/CD", "status": "In Progress"}}'
         mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
