@@ -101,7 +101,7 @@ class Api:
         payload = {'name': self.environment.engagement_name,
                    'product': product,
                    'target_start': self.environment.engagement_target_start,
-                   'target_end': self.environment.engagement_target_stop,
+                   'target_end': self.environment.engagement_target_end,
                    'engagement_type': 'CI/CD',
                    'status': 'In Progress'}
         r = requests.post(self.engagement_url,
