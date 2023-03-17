@@ -10,55 +10,55 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Bandit
-        uses: StefanFl/secobserve_github_actions/SAST/bandit@main
+        uses: StefanFl/secobserve_github_actions/actions/SAST/bandit@main
         with:
           target: 'dd_import'
           report_name: 'dd_import_bandit.sarif'
 
       - name: Run Semgrep
-        uses: StefanFl/secobserve_github_actions/SAST/semgrep@main
+        uses: StefanFl/secobserve_github_actions/actions/SAST/semgrep@main
         with:
           target: 'dd_import'
           report_name: 'dd_import_semgrep.json'
           configuration: 'r/python'
 
       - name: Run KICS
-        uses: StefanFl/secobserve_github_actions/SAST/kics@main
+        uses: StefanFl/secobserve_github_actions/actions/SAST/kics@main
         with:
           target: '.'
           report_name: 'dd_import_kics.sarif'
 
       - name: Run Checkov
-        uses: StefanFl/secobserve_github_actions/SAST/checkov@main
+        uses: StefanFl/secobserve_github_actions/actions/SAST/checkov@main
         with:
           target: '.'
           report_name: 'dd_import_checkov.sarif'
 
       - name: Run Trivy image
-        uses: StefanFl/secobserve_github_actions/SCA/trivy_image@main
+        uses: StefanFl/secobserve_github_actions/actions/SCA/trivy_image@main
         with:
           target: 'maibornwolff/dd-import:latest'
           report_name: 'dd_import_trivy_image.json'
 
       - name: Run Grype image
-        uses: StefanFl/secobserve_github_actions/SCA/grype_image@main
+        uses: StefanFl/secobserve_github_actions/actions/SCA/grype_image@main
         with:
           target: 'maibornwolff/dd-import:latest'
           report_name: 'dd_import_grype_image.json'
 
       - name: Run Gitleaks
-        uses: StefanFl/secobserve_github_actions/secrets/gitleaks@main
+        uses: StefanFl/secobserve_github_actions/actions/secrets/gitleaks@main
         with:
           report_name: 'dd_import_gitleaks.sarif'
 
       - name: Run DrHeader
-        uses: StefanFl/secobserve_github_actions/communication/drheader@main
+        uses: StefanFl/secobserve_github_actions/actions/communication/drheader@main
         with:
           target: 'https://demo.defectdojo.org'
           report_name: 'dd_import_drheader.json'
 
       - name: Run SSLyze
-        uses: StefanFl/secobserve_github_actions/communication/sslyze@main
+        uses: StefanFl/secobserve_github_actions/actions/communication/sslyze@main
         with:
           target: 'demo.defectdojo.org'
           report_name: 'dd_import_sslyze.json'
