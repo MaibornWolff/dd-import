@@ -52,13 +52,13 @@ jobs:
           report_name: 'dd_import_gitleaks.sarif'
 
       - name: Run DrHeader
-        uses: StefanFl/secobserve_github_actions/actions/communication/drheader@main
+        uses: StefanFl/secobserve_github_actions/actions/DAST/drheader@main
         with:
           target: 'https://demo.defectdojo.org'
           report_name: 'dd_import_drheader.json'
 
       - name: Run SSLyze
-        uses: StefanFl/secobserve_github_actions/actions/communication/sslyze@main
+        uses: StefanFl/secobserve_github_actions/actions/DAST/sslyze@main
         with:
           target: 'demo.defectdojo.org'
           report_name: 'dd_import_sslyze.json'
