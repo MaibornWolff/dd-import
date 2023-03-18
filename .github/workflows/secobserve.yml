@@ -51,24 +51,6 @@ jobs:
         with:
           report_name: 'dd_import_gitleaks.sarif'
 
-      - name: Run DrHeader
-        uses: StefanFl/secobserve_github_actions/actions/DAST/drheader@main
-        with:
-          target: 'https://demo.defectdojo.org'
-          report_name: 'dd_import_drheader.json'
-
-      - name: Run SSLyze
-        uses: StefanFl/secobserve_github_actions/actions/DAST/sslyze@main
-        with:
-          target: 'demo.defectdojo.org'
-          report_name: 'dd_import_sslyze.json'
-
-      - name: Run OWASP ZAP
-        uses: StefanFl/secobserve_github_actions/actions/DAST/owasp_zap@main
-        with:
-          target: 'https://demo.defectdojo.org'
-          report_name: 'dd_import_owasp_zap.json'
-
       - name: Upload results
         uses: actions/upload-artifact@v3
         with:
@@ -81,6 +63,3 @@ jobs:
             dd_import_trivy_image.json
             dd_import_grype_image.json
             dd_import_gitleaks.sarif
-            dd_import_drheader.json
-            dd_import_sslyze.json
-            dd_import_owasp_zap.json
