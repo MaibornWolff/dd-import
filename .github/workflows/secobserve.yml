@@ -25,35 +25,41 @@ jobs:
           target: 'dd_import'
           report_name: 'dd_import_semgrep.json'
           configuration: 'r/python'
+          so_upload: 'false'
 
       - name: Run KICS
         uses: StefanFl/secobserve_github_actions/actions/SAST/kics@main
         with:
           target: '.'
           report_name: 'dd_import_kics.sarif'
+          so_upload: 'false'
 
       - name: Run Checkov
         uses: StefanFl/secobserve_github_actions/actions/SAST/checkov@main
         with:
           target: '.'
           report_name: 'dd_import_checkov.sarif'
+          so_upload: 'false'
 
       - name: Run Trivy image
         uses: StefanFl/secobserve_github_actions/actions/SCA/trivy_image@main
         with:
           target: 'maibornwolff/dd-import:latest'
           report_name: 'dd_import_trivy_image.json'
+          so_upload: 'false'
 
       - name: Run Grype image
         uses: StefanFl/secobserve_github_actions/actions/SCA/grype_image@main
         with:
           target: 'maibornwolff/dd-import:latest'
           report_name: 'dd_import_grype_image.json'
+          so_upload: 'false'
 
       - name: Run Gitleaks
         uses: StefanFl/secobserve_github_actions/actions/secrets/gitleaks@main
         with:
           report_name: 'dd_import_gitleaks.sarif'
+          so_upload: 'false'
 
       - name: Upload results
         uses: actions/upload-artifact@v3
