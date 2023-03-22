@@ -392,6 +392,7 @@ class TestApi(TestCase):
                    'verified': True,
                    'push_to_jira': True,
                    'close_old_findings': True,
+                   'close_old_findings_product_scope': False,
                    'minimum_severity': 'Info',
                    'version': 'version',
                    'endpoint_to_add': 6,
@@ -411,6 +412,7 @@ class TestApi(TestCase):
                                'DD_VERIFIED': 'false',
                                'DD_PUSH_TO_JIRA': 'false',
                                'DD_CLOSE_OLD_FINDINGS': 'false',
+                               'DD_CLOSE_OLD_FINDINGS_PRODUCT_SCOPE': 'true',
                                'DD_FILE_NAME': 'file_name'})
     def test_reimport_findings_with_file(self, mockOpen, mockPost, mockEnv):
         response = Mock(spec=Response)
@@ -428,11 +430,50 @@ class TestApi(TestCase):
                    'active': False,
                    'verified': False,
                    'push_to_jira': False,
-                   'close_old_findings': False
+                   'close_old_findings': False,
+                   'close_old_findings_product_scope': True
                    }
         files = {'file': ('file_name', 'file_open', 'application/json', {'Expires': '0'})}
         mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload, files=files, verify=True)
         response.raise_for_status.assert_called_once()
+
+    @patch('dd_import.environment.Environment')
+    @patch('requests.post')
+    @patch('builtins.open')
+    @patch.dict('os.environ', {'DD_URL': 'https://example.com',
+                               'DD_API_KEY': 'api_key',
+                               'DD_TEST_TYPE_NAME': 'test_type',
+                               'DD_ACTIVE': 'False',
+                               'DD_VERIFIED': 'false',
+                               'DD_PUSH_TO_JIRA': 'false',
+                               'DD_CLOSE_OLD_FINDINGS': 'false',
+                               'DD_FILE_NAME': 'file_name',
+                               'DD_SOURCE_CODE_MANAGEMENT_URI': 'https://github.com/MyOrg/MyProject/tree/main'})
+    def test_reimport_findings_with_source_code_management_uri(self, mockOpen, mockPost, mockEnv):
+        response = Mock(spec=Response)
+        response.status_code = 200
+        mockPost.return_value = response
+        mockOpen.return_value = 'file_open'
+
+        api = Api()
+        api.reimport_scan(self.test_id)
+
+        url = 'https://example.com/api/v2/reimport-scan/'
+        payload = {'scan_date': datetime.date.today().isoformat(),
+                   'scan_type': 'test_type',
+                   'test': self.test_id,
+                   'active': False,
+                   'verified': False,
+                   'push_to_jira': False,
+                   'close_old_findings': False,
+                   'close_old_findings_product_scope': False,
+                   'source_code_management_uri': 'https://github.com/MyOrg/MyProject/tree/main'
+                   }
+        files = {'file': ('file_name', 'file_open', 'application/json', {'Expires': '0'})}
+        mockPost.assert_called_once_with(url, headers=self.header_without_json, data=payload, files=files, verify=True)
+        response.raise_for_status.assert_called_once()
+
+
 
     @patch('dd_import.environment.Environment')
     @patch('requests.post')
