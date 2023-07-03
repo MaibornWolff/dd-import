@@ -36,6 +36,7 @@ class TestEnvironment(TestCase):
                                'DD_PUSH_TO_JIRA': 'True',
                                'DD_CLOSE_OLD_FINDINGS': 'False',
                                'DD_CLOSE_OLD_FINDINGS_PRODUCT_SCOPE': 'True',
+                               'DD_DO_NOT_REACTIVATE': 'True',
                                'DD_VERSION': 'version',
                                'DD_ENDPOINT_ID': 'endpoint_id',
                                'DD_SERVICE': 'service',
@@ -68,6 +69,7 @@ class TestEnvironment(TestCase):
         self.assertTrue(environment.push_to_jira)
         self.assertFalse(environment.close_old_findings)
         self.assertTrue(environment.close_old_findings_product_scope)
+        self.assertTrue(environment.do_not_reactivate)
         self.assertEqual(environment.version, 'version')
         self.assertEqual(environment.endpoint_id, 'endpoint_id')
         self.assertEqual(environment.service, 'service')
@@ -122,6 +124,7 @@ class TestEnvironment(TestCase):
         self.assertEqual(environment.group_by, 'group_by')
         self.assertTrue(environment.push_to_jira)
         self.assertFalse(environment.close_old_findings)
+        self.assertFalse(environment.do_not_reactivate)
         self.assertEqual(environment.version, 'version')
         self.assertEqual(environment.endpoint_id, 'endpoint_id')
         self.assertEqual(environment.service, 'service')

@@ -23,6 +23,7 @@ class Environment:
         self.push_to_jira = os.getenv('DD_PUSH_TO_JIRA', 'False').lower() in ['true']
         self.close_old_findings = os.getenv('DD_CLOSE_OLD_FINDINGS', 'True').lower() in ['true']
         self.close_old_findings_product_scope = os.getenv('DD_CLOSE_OLD_FINDINGS_PRODUCT_SCOPE', 'False').lower() in ['true']
+        self.do_not_reactivate = os.getenv('DD_DO_NOT_REACTIVATE', 'False').lower() in ['true']
         self.version = os.getenv('DD_VERSION', None)
         self.endpoint_id = os.getenv('DD_ENDPOINT_ID', None)
         self.service = os.getenv('DD_SERVICE', None)
@@ -67,6 +68,7 @@ class Environment:
         print('DD_PUSH_TO_JIRA:                    ', self.push_to_jira)
         print('DD_CLOSE_OLD_FINDINGS:              ', self.close_old_findings)
         print('DD_CLOSE_OLD_FINDINGS_PRODUCT_SCOPE:', self.close_old_findings_product_scope)
+        print('DD_DO_NOT_REACTIVATE:               ', self.do_not_reactivate)
         print('DD_VERSION:                         ', self.version)
         print('DD_ENDPOINT_ID:                     ', self.endpoint_id)
         print('DD_SERVICE:                         ', self.service)

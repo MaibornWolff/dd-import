@@ -182,6 +182,7 @@ class Api:
                    'push_to_jira': self.environment.push_to_jira,
                    'close_old_findings': self.environment.close_old_findings,
                    'close_old_findings_product_scope': self.environment.close_old_findings_product_scope,
+                   'do_not_reactivate': self.environment.do_not_reactivate
                    }
         if self.environment.minimum_severity is not None:
             payload['minimum_severity'] = self.environment.minimum_severity
