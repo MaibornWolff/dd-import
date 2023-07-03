@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Bandit
-        uses: StefanFl/secobserve_github_actions/actions/SAST/bandit@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/bandit@main
         with:
           target: 'dd_import'
           report_name: 'dd_import_bandit.sarif'
@@ -20,7 +20,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Semgrep
-        uses: StefanFl/secobserve_github_actions/actions/SAST/semgrep@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/semgrep@main
         with:
           target: 'dd_import'
           report_name: 'dd_import_semgrep.json'
@@ -28,35 +28,35 @@ jobs:
           so_upload: 'false'
 
       - name: Run KICS
-        uses: StefanFl/secobserve_github_actions/actions/SAST/kics@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/kics@main
         with:
           target: '.'
           report_name: 'dd_import_kics.sarif'
           so_upload: 'false'
 
       - name: Run Checkov
-        uses: StefanFl/secobserve_github_actions/actions/SAST/checkov@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/checkov@main
         with:
           target: '.'
           report_name: 'dd_import_checkov.sarif'
           so_upload: 'false'
 
       - name: Run Trivy image
-        uses: StefanFl/secobserve_github_actions/actions/SCA/trivy_image@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SCA/trivy_image@main
         with:
           target: 'maibornwolff/dd-import:latest'
           report_name: 'dd_import_trivy_image.json'
           so_upload: 'false'
 
       - name: Run Grype image
-        uses: StefanFl/secobserve_github_actions/actions/SCA/grype_image@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SCA/grype_image@main
         with:
           target: 'maibornwolff/dd-import:latest'
           report_name: 'dd_import_grype_image.json'
           so_upload: 'false'
 
       - name: Run Gitleaks
-        uses: StefanFl/secobserve_github_actions/actions/secrets/gitleaks@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/secrets/gitleaks@main
         with:
           report_name: 'dd_import_gitleaks.sarif'
           so_upload: 'false'
