@@ -78,6 +78,10 @@ All parameters need to be provided as environment variables
 | DD_BRANCH_TAG         | Optional           | -                | |
 | DD_API_SCAN_CONFIGURATION_ID | Optional    | -                | Id of the API scan configuration for API based parsers, e.g. SonarQube |
 | DD_SSL_VERIFY         | Optional           | Optional         | Disable SSL verification by setting to `false` or `0`. Default: `true` |
+| DD_EXTRA_HEADER_1         | Optional           | Optional         | If extra header key is needed for auth in wafs or similar |
+| DD_EXTRA_HEADER_1_VALUE   | Optional           | Optional         | The corresponding value for extra header key |
+| DD_EXTRA_HEADER_2         | Optional           | Optional         | If extra header key is needed for auth in wafs or similar |
+| DD_EXTRA_HEADER_2_VALUE   | Optional           | Optional         | The corresponding value for extra header key |
 
 ### Usage
 

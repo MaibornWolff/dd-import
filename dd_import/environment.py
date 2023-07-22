@@ -8,6 +8,10 @@ class Environment:
     def __init__(self):
         self.url = os.getenv('DD_URL')
         self.api_key = os.getenv('DD_API_KEY')
+        self.extra_header_1 = os.getenv('DD_EXTRA_HEADER_1')
+        self.extra_header_2 = os.getenv('DD_EXTRA_HEADER_2')
+        self.extra_header_1_value = os.getenv('DD_EXTRA_HEADER_1_VALUE')
+        self.extra_header_2_value = os.getenv('DD_EXTRA_HEADER_2_VALUE')
         self.product_name = os.getenv('DD_PRODUCT_NAME')
         self.product_type_name = os.getenv('DD_PRODUCT_TYPE_NAME')
         self.engagement_name = os.getenv('DD_ENGAGEMENT_NAME')
@@ -72,7 +76,8 @@ class Environment:
         print('DD_BRANCH_TAG:                ', self.branch_tag)
         print('DD_API_SCAN_CONFIGURATION_ID: ', self.api_scan_configuration_id)
         print('DD_SSL_VERIFY:                ', self.ssl_verification)
-        print('')
+        print('DD_EXTRA_HEADER_1:            ', self.extra_header_1)
+        print('DD_EXTRA_HEADER_2:            ', self.extra_header_2)
 
     def check_environment_languages(self):
         error_string = self.check_environment_common()
