@@ -78,6 +78,7 @@ class Environment:
         print('DD_SSL_VERIFY:                ', self.ssl_verification)
         print('DD_EXTRA_HEADER_1:            ', self.extra_header_1)
         print('DD_EXTRA_HEADER_2:            ', self.extra_header_2)
+        print('')
 
     def check_environment_languages(self):
         error_string = self.check_environment_common()
