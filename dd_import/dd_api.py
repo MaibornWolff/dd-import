@@ -50,7 +50,18 @@ class Api:
                 product_type_id = product_type['id']
                 print('Product type found, id: ', product_type_id)
                 return product_type_id
-        raise Exception(f'Product type {self.environment.product_type_name} not found')
+        return self.new_product_type(self.environment.product_type_name)
+
+    def new_product_type(self, product_type_name):
+        payload = {'name': product_type_name}
+        r = requests.post(self.product_type_url,
+                          headers=self.headers,
+                          data=json.dumps(payload),
+                          verify=self.ssl_verification)
+        r.raise_for_status()
+        product_type_data = json.loads(r.text)
+        print('New product type,   id: ', product_type_data['id'])
+        return product_type_data['id']
 
     def get_product(self, product_type):
         payload = {'name': self.environment.product_name,

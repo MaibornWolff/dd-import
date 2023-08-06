@@ -44,23 +44,45 @@ class TestApi(TestCase):
 
     @patch('dd_import.environment.Environment')
     @patch('requests.get')
+    @patch('dd_import.dd_api.Api.new_product_type')
     @patch.dict('os.environ', {'DD_URL': 'https://example.com',
                                'DD_API_KEY': 'api_key',
                                'DD_PRODUCT_TYPE_NAME': 'product_type'})
-    def test_get_product_type_not_found(self, mockGet, mockEnv):
+    def test_get_product_type_not_found(self, mockNewProductType, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 2, \"results\": [{\"id\": 0, \"name\": \"product_type_dev\"}, {\"id\": 1, \"name\": \"product_type_prod\"}]}'
+        response.text = '{\"count\": 1, \"results\": [{\"id\": 0, \"name\": \"product_type_dev\"}]}'
         mockGet.return_value = response
+        mockNewProductType.return_value = self.product_type_id
 
-        with self.assertRaises(Exception) as cm:
-            api = Api()
-            api.get_product_type()
+        api = Api()
+        id = api.get_product_type()
 
-        self.assertEqual('Product type product_type not found', str(cm.exception))
+        self.assertEqual(id, self.product_type_id)
         url = 'https://example.com/api/v2/product_types/'
         payload = {'name': 'product_type'}
         mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
+        response.raise_for_status.assert_called_once()
+        mockNewProductType.assert_called_once_with('product_type')
+
+    @patch('dd_import.environment.Environment')
+    @patch('requests.post')
+    @patch.dict('os.environ', {'DD_URL': 'https://example.com',
+                               'DD_API_KEY': 'api_key',
+                               'DD_PRODUCT_TYPE_NAME': 'product_type'})
+    def test_new_product_type(self, mockPost, mockEnv):
+        response = Mock(spec=Response)
+        response.status_code = 200
+        response.text = '{\"id\": 1}'
+        mockPost.return_value = response
+
+        api = Api()
+        id = api.new_product_type('product_type')
+
+        self.assertEqual(id, self.product_type_id)
+        url = 'https://example.com/api/v2/product_types/'
+        payload = '{"name": "product_type"}'
+        mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
     @patch('dd_import.environment.Environment')

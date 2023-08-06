@@ -4,7 +4,7 @@
 
 Findings and languages can be imported into DefectDojo via an [API](https://defectdojo.github.io/django-DefectDojo/integrations/api-v2-docs/). To make automated build and deploy pipelines easier to implement, `dd-import` provides some convenience functions:
 
-- Products, engagements and tests will be created if they are not existing. This avoids manual preparation in DefectDojo or complicated steps within the pipeline.
+- Product types, products, engagements and tests will be created if they are not existing. This avoids manual preparation in DefectDojo or complicated steps within the pipeline.
 - Product types, products, engagements and tests are referenced by name. This make pipelines more readable than using IDs.
 - Build information for `build_id`, `commit_hash` and `branch_tag` can be updated when uploading findings.
 - No need to deal with `curl` and its syntax within the pipeline. This makes pipelines shorter and better readable.
@@ -56,7 +56,7 @@ All parameters need to be provided as environment variables
 |-----------------------|:------------------:|:----------------:|--------|
 | DD_URL                | Mandatory          | Mandatory        | Base URL of the DefectDojo instance |
 | DD_API_KEY            | Mandatory          | Mandatory        | Shall be defined as a secret, eg. a protected variable in GitLab or an encrypted secret in GitHub |
-| DD_PRODUCT_TYPE_NAME  | Mandatory          | Mandatory        | A product type with this name must exist |
+| DD_PRODUCT_TYPE_NAME  | Mandatory          | Mandatory        | If a product type with this name does not exist, it will be created |
 | DD_PRODUCT_NAME       | Mandatory          | Mandatory        | If a product with this name does not exist, it will be created |
 | DD_ENGAGEMENT_NAME    | Mandatory          | -                | If an engagement with this name does not exist for the given product, it will be created |
 | DD_ENGAGEMENT_TARGET_START | Optional    | -                | Format: YYYY-MM-DD, default: `today`. The target start date for a newly created engagement. |
