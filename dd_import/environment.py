@@ -56,7 +56,6 @@ class Environment:
         if len(error_string) > 0:
             raise Exception(error_string)
 
-<<<<<<< HEAD
         print('DD_URL:                       ', self.url)
         print('DD_PRODUCT_TYPE_NAME:         ', self.product_type_name)
         print('DD_PRODUCT_NAME:              ', self.product_name)
@@ -82,34 +81,6 @@ class Environment:
         print('DD_SSL_VERIFY:                ', self.ssl_verification)
         print('DD_EXTRA_HEADER_1:            ', self.extra_header_1)
         print('DD_EXTRA_HEADER_2:            ', self.extra_header_2)
-=======
-        print('DD_URL:                             ', self.url)
-        print('DD_PRODUCT_TYPE_NAME:               ', self.product_type_name)
-        print('DD_PRODUCT_NAME:                    ', self.product_name)
-        print('DD_ENGAGEMENT_NAME:                 ', self.engagement_name)
-        print('DD_ENGAGEMENT_TARGET_START:         ', self.engagement_target_start)
-        print('DD_ENGAGEMENT_TARGET_END:           ', self.engagement_target_end)
-        print('DD_TEST_NAME:                       ', self.test_name)
-        print('DD_TEST_TYPE_NAME:                  ', self.test_type_name)
-        print('DD_FILE_NAME:                       ', self.file_name)
-        print('DD_ACTIVE:                          ', self.active)
-        print('DD_VERIFIED:                        ', self.verified)
-        print('DD_MINIMUM_SEVERITY:                ', self.minimum_severity)
-        print('DD_GROUP_BY:                        ', self.group_by)
-        print('DD_PUSH_TO_JIRA:                    ', self.push_to_jira)
-        print('DD_CLOSE_OLD_FINDINGS:              ', self.close_old_findings)
-        print('DD_CLOSE_OLD_FINDINGS_PRODUCT_SCOPE:', self.close_old_findings_product_scope)
-        print('DD_DO_NOT_REACTIVATE:               ', self.do_not_reactivate)
-        print('DD_VERSION:                         ', self.version)
-        print('DD_ENDPOINT_ID:                     ', self.endpoint_id)
-        print('DD_SERVICE:                         ', self.service)
-        print('DD_BUILD_ID:                        ', self.build_id)
-        print('DD_COMMIT_HASH:                     ', self.commit_hash)
-        print('DD_BRANCH_TAG:                      ', self.branch_tag)
-        print('DD_API_SCAN_CONFIGURATION_ID:       ', self.api_scan_configuration_id)
-        print('DD_SOURCE_CODE_MANAGEMENT_URI:      ', self.source_code_management_uri)
-        print('DD_SSL_VERIFY:                      ', self.ssl_verification)
->>>>>>> main
         print('')
 
     def check_environment_languages(self):
