@@ -25,9 +25,30 @@ class Api:
     def __init__(self):
         self.environment = Environment()
         self.headers = {'Content-type': 'application/json',
-                        'Authorization': 'Token ' + self.environment.api_key}
-        self.headers_without_json = {'Authorization':
-                                     'Token ' + self.environment.api_key}
+            'Authorization': 'Token ' + self.environment.api_key}
+
+        if self.environment.extra_header_1 and self.environment.extra_header_1_value is not None:
+            self.headers.update({
+                self.environment.extra_header_1: self.environment.extra_header_1_value
+                })
+            
+        if self.environment.extra_header_2 and self.environment.extra_header_2_value is not None:
+            self.headers.update({
+                self.environment.extra_header_2: self.environment.extra_header_2_value
+                })
+
+        self.headers_without_json = {'Authorization':'Token ' + self.environment.api_key}
+
+        if self.environment.extra_header_1 and self.environment.extra_header_1_value is not None:
+            self.headers_without_json.update({
+                self.environment.extra_header_1: self.environment.extra_header_1_value
+                })
+            
+        if self.environment.extra_header_2 and self.environment.extra_header_2_value is not None:
+            self.headers_without_json.update({
+                self.environment.extra_header_2: self.environment.extra_header_2_value
+                })
+
         self.product_type_url = self.environment.url + '/api/v2/product_types/'
         self.product_url = self.environment.url + '/api/v2/products/'
         self.engagement_url = self.environment.url + '/api/v2/engagements/'

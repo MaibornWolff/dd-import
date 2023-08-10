@@ -45,7 +45,13 @@ class TestEnvironment(TestCase):
                                'DD_BRANCH_TAG': 'branch_tag',
                                'DD_API_SCAN_CONFIGURATION_ID': 'api_scan_configuration_id',
                                'DD_SOURCE_CODE_MANAGEMENT_URI': 'https://github.com/MyOrg/MyProject/tree/main',
-                               'DD_SSL_VERIFY': 'false'})
+                               'DD_SSL_VERIFY': 'false',
+                               'DD_EXTRA_HEADER_1': 'header_1',
+                               'DD_EXTRA_HEADER_1_VALUE': 'header_1_value',
+                               'DD_EXTRA_HEADER_2': 'header_2',
+                               'DD_EXTRA_HEADER_2_VALUE': 'header_2_value'})
+    
+    
     def test_check_environment_reimport_findings_complete(self):
 
         environment = Environment()
@@ -79,6 +85,11 @@ class TestEnvironment(TestCase):
         self.assertEqual(environment.api_scan_configuration_id, 'api_scan_configuration_id')
         self.assertEqual(environment.source_code_management_uri, 'https://github.com/MyOrg/MyProject/tree/main')
         self.assertEqual(environment.ssl_verification, False)
+        self.assertEqual(environment.extra_header_1, 'header_1')
+        self.assertEqual(environment.extra_header_1_value, 'header_1_value')
+        self.assertEqual(environment.extra_header_2, 'header_2')
+        self.assertEqual(environment.extra_header_2_value, 'header_2_value')
+
 
     @patch.dict('os.environ', {'DD_URL': 'url',
                                'DD_API_KEY': 'api_key',
