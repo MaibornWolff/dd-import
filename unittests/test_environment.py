@@ -35,6 +35,8 @@ class TestEnvironment(TestCase):
                                'DD_GROUP_BY': 'group_by',
                                'DD_PUSH_TO_JIRA': 'True',
                                'DD_CLOSE_OLD_FINDINGS': 'False',
+                               'DD_CLOSE_OLD_FINDINGS_PRODUCT_SCOPE': 'True',
+                               'DD_DO_NOT_REACTIVATE': 'True',
                                'DD_VERSION': 'version',
                                'DD_ENDPOINT_ID': 'endpoint_id',
                                'DD_SERVICE': 'service',
@@ -42,6 +44,7 @@ class TestEnvironment(TestCase):
                                'DD_COMMIT_HASH': 'commit_hash',
                                'DD_BRANCH_TAG': 'branch_tag',
                                'DD_API_SCAN_CONFIGURATION_ID': 'api_scan_configuration_id',
+                               'DD_SOURCE_CODE_MANAGEMENT_URI': 'https://github.com/MyOrg/MyProject/tree/main',
                                'DD_SSL_VERIFY': 'false'})
     def test_check_environment_reimport_findings_complete(self):
 
@@ -65,6 +68,8 @@ class TestEnvironment(TestCase):
         self.assertEqual(environment.group_by, 'group_by')
         self.assertTrue(environment.push_to_jira)
         self.assertFalse(environment.close_old_findings)
+        self.assertTrue(environment.close_old_findings_product_scope)
+        self.assertTrue(environment.do_not_reactivate)
         self.assertEqual(environment.version, 'version')
         self.assertEqual(environment.endpoint_id, 'endpoint_id')
         self.assertEqual(environment.service, 'service')
@@ -72,6 +77,7 @@ class TestEnvironment(TestCase):
         self.assertEqual(environment.commit_hash, 'commit_hash')
         self.assertEqual(environment.branch_tag, 'branch_tag')
         self.assertEqual(environment.api_scan_configuration_id, 'api_scan_configuration_id')
+        self.assertEqual(environment.source_code_management_uri, 'https://github.com/MyOrg/MyProject/tree/main')
         self.assertEqual(environment.ssl_verification, False)
 
     @patch.dict('os.environ', {'DD_URL': 'url',
@@ -118,6 +124,7 @@ class TestEnvironment(TestCase):
         self.assertEqual(environment.group_by, 'group_by')
         self.assertTrue(environment.push_to_jira)
         self.assertFalse(environment.close_old_findings)
+        self.assertFalse(environment.do_not_reactivate)
         self.assertEqual(environment.version, 'version')
         self.assertEqual(environment.endpoint_id, 'endpoint_id')
         self.assertEqual(environment.service, 'service')

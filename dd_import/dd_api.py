@@ -71,7 +71,18 @@ class Api:
                 product_type_id = product_type['id']
                 print('Product type found, id: ', product_type_id)
                 return product_type_id
-        raise Exception(f'Product type {self.environment.product_type_name} not found')
+        return self.new_product_type(self.environment.product_type_name)
+
+    def new_product_type(self, product_type_name):
+        payload = {'name': product_type_name}
+        r = requests.post(self.product_type_url,
+                          headers=self.headers,
+                          data=json.dumps(payload),
+                          verify=self.ssl_verification)
+        r.raise_for_status()
+        product_type_data = json.loads(r.text)
+        print('New product type,   id: ', product_type_data['id'])
+        return product_type_data['id']
 
     def get_product(self, product_type):
         payload = {'name': self.environment.product_name,
@@ -202,6 +213,8 @@ class Api:
                    'verified': self.environment.verified,
                    'push_to_jira': self.environment.push_to_jira,
                    'close_old_findings': self.environment.close_old_findings,
+                   'close_old_findings_product_scope': self.environment.close_old_findings_product_scope,
+                   'do_not_reactivate': self.environment.do_not_reactivate
                    }
         if self.environment.minimum_severity is not None:
             payload['minimum_severity'] = self.environment.minimum_severity
@@ -215,6 +228,8 @@ class Api:
             payload['service'] = self.environment.service
         if self.environment.api_scan_configuration_id is not None:
             payload['api_scan_configuration'] = self.environment.api_scan_configuration_id
+        if self.environment.source_code_management_uri is not None:
+            payload['source_code_management_uri'] = self.environment.source_code_management_uri
 
         if self.environment.file_name is not None:
             files = {'file': (self.environment.file_name,

@@ -4,7 +4,7 @@
 
 Findings and languages can be imported into DefectDojo via an [API](https://defectdojo.github.io/django-DefectDojo/integrations/api-v2-docs/). To make automated build and deploy pipelines easier to implement, `dd-import` provides some convenience functions:
 
-- Products, engagements and tests will be created if they are not existing. This avoids manual preparation in DefectDojo or complicated steps within the pipeline.
+- Product types, products, engagements and tests will be created if they are not existing. This avoids manual preparation in DefectDojo or complicated steps within the pipeline.
 - Product types, products, engagements and tests are referenced by name. This make pipelines more readable than using IDs.
 - Build information for `build_id`, `commit_hash` and `branch_tag` can be updated when uploading findings.
 - No need to deal with `curl` and its syntax within the pipeline. This makes pipelines shorter and better readable.
@@ -16,7 +16,7 @@ Findings and languages can be imported into DefectDojo via an [API](https://defe
 
 **Python**
 
-`dd-import` can be installed with pip. Only Python 3.8 and up is suported.
+`dd-import` can be installed with pip. Only Python 3.8 and up is supported.
 
 ```bash
 pip install dd-import
@@ -50,8 +50,9 @@ Please note you have to set the environment variables as described below and mou
 
 ### Parameters
 
-All parameters need to be provided as environment variables
+All parameters need to be provided as environment variables:
 
+<<<<<<< HEAD
 | Parameter             | Re-import findings | Import languages | Remark |
 |-----------------------|:------------------:|:----------------:|--------|
 | DD_URL                | Mandatory          | Mandatory        | Base URL of the DefectDojo instance |
@@ -82,6 +83,37 @@ All parameters need to be provided as environment variables
 | DD_EXTRA_HEADER_1_VALUE   | Optional           | Optional         | The corresponding value for extra header key |
 | DD_EXTRA_HEADER_2         | Optional           | Optional         | If extra header key is needed for auth in wafs or similar |
 | DD_EXTRA_HEADER_2_VALUE   | Optional           | Optional         | The corresponding value for extra header key |
+=======
+| Parameter                           | Re-import findings | Import languages | Remark                                                                                            |
+|-------------------------------------|:------------------:|:----------------:|---------------------------------------------------------------------------------------------------|
+| DD_URL                              | Mandatory          | Mandatory        | Base URL of the DefectDojo instance                                                               |
+| DD_API_KEY                          | Mandatory          | Mandatory        | Shall be defined as a secret, eg. a protected variable in GitLab or an encrypted secret in GitHub |
+| DD_PRODUCT_TYPE_NAME                | Mandatory          | Mandatory        | If a product type with this name does not exist, it will be created                               |
+| DD_PRODUCT_NAME                     | Mandatory          | Mandatory        | If a product with this name does not exist, it will be created                                    |
+| DD_ENGAGEMENT_NAME                  | Mandatory          | -                | If an engagement with this name does not exist for the given product, it will be created          |
+| DD_ENGAGEMENT_TARGET_START          | Optional           | -                | Format: YYYY-MM-DD, default: `today`. The target start date for a newly created engagement.       |
+| DD_ENGAGEMENT_TARGET_END            | Optional           | -                | Format: YYYY-MM-DD, default: `2999-12-31`. The target start date for a newly created engagement.  |
+| DD_TEST_NAME                        | Mandatory          | -                | If a test with this name does not exist for the given engagement, it will be created              |
+| DD_TEST_TYPE_NAME                   | Mandatory          | -                | From DefectDojo's list of test types, eg. `Trivy Scan`                                            |
+| DD_FILE_NAME                        | Optional           | Mandatory        |                                                                                                   |
+| DD_ACTIVE                           | Optional           | -                | Default: `true`                                                                                   |
+| DD_VERIFIED                         | Optional           | -                | Default: `true`                                                                                   |
+| DD_MINIMUM_SEVERITY                 | Optional           | -                |                                                                                                   |
+| DD_GROUP_BY                         | Optional           | -                | Group by file path, component name, component name + version                                      |
+| DD_PUSH_TO_JIRA                     | Optional           | -                | Default: `false`                                                                                  |
+| DD_CLOSE_OLD_FINDINGS               | Optional           | -                | Default: `true`                                                                                   |
+| DD_CLOSE_OLD_FINDINGS_PRODUCT_SCOPE | Optional           | -                | Default: `false`                                                                                  |
+| DD_DO_NOT_REACTIVATE                | Optional           | -                | Default: `false`                                                                                  |
+| DD_VERSION                          | Optional           | -                |                                                                                                   |
+| DD_ENDPOINT_ID                      | Optional           | -                |                                                                                                   |
+| DD_SERVICE                          | Optional           | -                |                                                                                                   |
+| DD_BUILD_ID                         | Optional           | -                |                                                                                                   |
+| DD_COMMIT_HASH                      | Optional           | -                |                                                                                                   |
+| DD_BRANCH_TAG                       | Optional           | -                |                                                                                                   |
+| DD_API_SCAN_CONFIGURATION_ID        | Optional           | -                | Id of the API scan configuration for API based parsers, e.g. SonarQube                            |
+| DD_SOURCE_CODE_MANAGEMENT_URI       | Optional           | -                |                                                                                                   |
+| DD_SSL_VERIFY                       | Optional           | Optional         | Disable SSL verification by setting to `false` or `0`. Default: `true`                            |
+>>>>>>> main
 
 ### Usage
 
