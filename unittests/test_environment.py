@@ -50,10 +50,7 @@ class TestEnvironment(TestCase):
                                'DD_EXTRA_HEADER_1_VALUE': 'header_1_value',
                                'DD_EXTRA_HEADER_2': 'header_2',
                                'DD_EXTRA_HEADER_2_VALUE': 'header_2_value'})
-    
-    
     def test_check_environment_reimport_findings_complete(self):
-
         environment = Environment()
         environment.check_environment_reimport_findings()
 
@@ -89,7 +86,6 @@ class TestEnvironment(TestCase):
         self.assertEqual(environment.extra_header_1_value, 'header_1_value')
         self.assertEqual(environment.extra_header_2, 'header_2')
         self.assertEqual(environment.extra_header_2_value, 'header_2_value')
-
 
     @patch.dict('os.environ', {'DD_URL': 'url',
                                'DD_API_KEY': 'api_key',
