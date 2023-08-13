@@ -33,6 +33,10 @@ class Environment:
         self.api_scan_configuration_id = os.getenv('DD_API_SCAN_CONFIGURATION_ID', None)
         self.source_code_management_uri = os.getenv('DD_SOURCE_CODE_MANAGEMENT_URI', None)
         self.ssl_verification = bool(strtobool(os.getenv('DD_SSL_VERIFY', 'true')))
+        self.extra_header_1 = os.getenv('DD_EXTRA_HEADER_1')
+        self.extra_header_2 = os.getenv('DD_EXTRA_HEADER_2')
+        self.extra_header_1_value = os.getenv('DD_EXTRA_HEADER_1_VALUE')
+        self.extra_header_2_value = os.getenv('DD_EXTRA_HEADER_2_VALUE')
 
     def check_environment_reimport_findings(self):
         error_string = self.check_environment_common()
@@ -78,6 +82,8 @@ class Environment:
         print('DD_API_SCAN_CONFIGURATION_ID:       ', self.api_scan_configuration_id)
         print('DD_SOURCE_CODE_MANAGEMENT_URI:      ', self.source_code_management_uri)
         print('DD_SSL_VERIFY:                      ', self.ssl_verification)
+        print('DD_EXTRA_HEADER_1:                  ', self.extra_header_1)
+        print('DD_EXTRA_HEADER_2:                  ', self.extra_header_2)
         print('')
 
     def check_environment_languages(self):
