@@ -127,6 +127,8 @@ class Api:
                    'target_end': self.environment.engagement_target_end,
                    'engagement_type': 'CI/CD',
                    'status': 'In Progress'}
+        if self.environment.source_code_management_uri is not None:
+            payload['source_code_management_uri'] = self.environment.source_code_management_uri
         r = requests.post(self.engagement_url,
                           headers=self.headers,
                           data=json.dumps(payload),
