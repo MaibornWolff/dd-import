@@ -173,7 +173,10 @@ class Api:
                    'target_start': today.isoformat(),
                    'target_end': datetime.datetime
                    .fromisoformat('2999-12-31').isoformat(),
-                   'test_type': self.get_test_type()}
+                   'test_type': self.get_test_type(),
+                   'commit_hash': self.environment.commit_hash,
+                   'branch_tag': self.environment.branch_tag,
+                   'build_id': self.environment.build_id}
         r = requests.post(self.test_url,
                           headers=self.headers,
                           data=json.dumps(payload),

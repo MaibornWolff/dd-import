@@ -319,7 +319,10 @@ class TestApi(TestCase):
     @patch('dd_import.dd_api.Api.get_test_type')
     @patch.dict('os.environ', {'DD_URL': 'https://example.com',
                                'DD_API_KEY': 'api_key',
-                               'DD_TEST_NAME': 'test'})
+                               'DD_TEST_NAME': 'test',
+                               'DD_BUILD_ID': 'build_id',
+                               'DD_COMMIT_HASH': 'commit_hash',
+                               'DD_BRANCH_TAG': 'branch_tag'})
     def test_new_test(self, mockTestType, mockPost, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
@@ -339,7 +342,10 @@ class TestApi(TestCase):
                    'target_start': today.isoformat(),
                    'target_end': datetime.datetime
                    .fromisoformat('2999-12-31').isoformat(),
-                   'test_type': self.test_type_id}
+                   'test_type': self.test_type_id,
+                   'commit_hash': 'commit_hash',
+                   'branch_tag': 'branch_tag',
+                   'build_id': 'build_id'}
         payload = json.dumps(payload)
         mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
