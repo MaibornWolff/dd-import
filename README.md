@@ -137,7 +137,7 @@ upload_trivy:
   image: maibornwolff/dd-import:latest
   needs:
     - job: trivy
-      artifacts: true  
+      artifacts: true
   variables:
     GIT_STRATEGY: none
     DD_TEST_NAME: "Trivy"
@@ -150,7 +150,7 @@ upload-cloc:
   image: maibornwolff/dd-import:latest
   needs:
     - job: cloc
-      artifacts: true  
+      artifacts: true
   stage: upload
   tags:
     - build
@@ -175,6 +175,20 @@ Another example, showing how to use `dd-import` within a GitHub Action, can be f
 `./bin/runUnitTests.sh` - Runs the unit tests and reports the test coverage.
 
 `./bin/runDockerUnitTests.sh` - First creates the docker image and then starts a docker container in which the unit tests are executed.
+
+### Git Hooks
+
+**pre-commit usage**
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+**hooks enabled**
+```bash
+trailing_whitespace_fixer.py
+flake8 --count --show-source --statistics
+```
 
 ## License
 
