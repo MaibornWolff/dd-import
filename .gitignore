@@ -5,3 +5,4 @@ coverage_data/
 dd_import_stefanf.egg-info
 dd_import.egg-info
 dist
+venv
