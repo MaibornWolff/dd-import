@@ -37,6 +37,9 @@ class Environment:
         self.extra_header_2 = os.getenv('DD_EXTRA_HEADER_2')
         self.extra_header_1_value = os.getenv('DD_EXTRA_HEADER_1_VALUE')
         self.extra_header_2_value = os.getenv('DD_EXTRA_HEADER_2_VALUE')
+        self.test_build_id = os.getenv('DD_TEST_BUILD_ID', None)
+        self.test_commit_hash = os.getenv('DD_TEST_COMMIT_HASH', None)
+        self.test_branch_tag = os.getenv('DD_TEST_BRANCH_TAG', None)
 
     def check_environment_reimport_findings(self):
         error_string = self.check_environment_common()
@@ -84,6 +87,9 @@ class Environment:
         print('DD_SSL_VERIFY:                      ', self.ssl_verification)
         print('DD_EXTRA_HEADER_1:                  ', self.extra_header_1)
         print('DD_EXTRA_HEADER_2:                  ', self.extra_header_2)
+        print('DD_TEST_BUILD_ID:                   ', self.test_build_id)
+        print('DD_TEST_COMMIT_HASH:                ', self.test_commit_hash)
+        print('DD_TEST_BRANCH_TAG:                 ', self.test_branch_tag)
         print('')
 
     def check_environment_languages(self):
