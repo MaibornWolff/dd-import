@@ -320,9 +320,9 @@ class TestApi(TestCase):
     @patch.dict('os.environ', {'DD_URL': 'https://example.com',
                                'DD_API_KEY': 'api_key',
                                'DD_TEST_NAME': 'test',
-                               'DD_BUILD_ID': 'build_id',
-                               'DD_COMMIT_HASH': 'commit_hash',
-                               'DD_BRANCH_TAG': 'branch_tag'})
+                               'DD_TEST_BUILD_ID': 'build_id',
+                               'DD_TEST_COMMIT_HASH': 'commit_hash',
+                               'DD_TEST_BRANCH_TAG': 'branch_tag'})
     def test_new_test(self, mockTestType, mockPost, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
