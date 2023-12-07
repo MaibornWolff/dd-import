@@ -49,12 +49,17 @@ class Api:
         self.import_languages_url = self.environment.url + '/api/v2/import-languages/'
         self.ssl_verification = self.environment.ssl_verification
 
+        self.cert = None
+        if(self.environment.client_certificate is not None and self.environment.client_key is not None)
+            self.cert =(self.environment.client_certificate, self.environment.client_key)
+
     def get_product_type(self):
         payload = {'name': self.environment.product_type_name}
         r = requests.get(self.product_type_url,
                          headers=self.headers,
                          params=payload,
-                         verify=self.ssl_verification)
+                         verify=self.ssl_verification,
+                         cert=self.cert)
         r.raise_for_status()
         product_type_data = json.loads(r.text)
         for product_type in product_type_data.get('results', []):
@@ -69,7 +74,8 @@ class Api:
         r = requests.post(self.product_type_url,
                           headers=self.headers,
                           data=json.dumps(payload),
-                          verify=self.ssl_verification)
+                          verify=self.ssl_verification,
+                          cert = self.cert)
         r.raise_for_status()
         product_type_data = json.loads(r.text)
         print('New product type,   id: ', product_type_data['id'])
@@ -81,7 +87,8 @@ class Api:
         r = requests.get(self.product_url,
                          headers=self.headers,
                          params=payload,
-                         verify=self.ssl_verification)
+                         verify=self.ssl_verification,
+                         cert =self.cert)
         r.raise_for_status()
         product_data = json.loads(r.text)
         for product in product_data.get('results', []):
@@ -98,7 +105,8 @@ class Api:
         r = requests.post(self.product_url,
                           headers=self.headers,
                           data=json.dumps(payload),
-                          verify=self.ssl_verification)
+                          verify=self.ssl_verification,
+                          cert=self.cert)
         r.raise_for_status()
         product_data = json.loads(r.text)
         print('New product,        id: ', product_data['id'])
@@ -110,7 +118,8 @@ class Api:
         r = requests.get(self.engagement_url,
                          headers=self.headers,
                          params=payload,
-                         verify=self.ssl_verification)
+                         verify=self.ssl_verification,
+                         cert=self.cert)
         r.raise_for_status()
         engagement_data = json.loads(r.text)
         for engagement in engagement_data.get('results', []):
@@ -132,7 +141,8 @@ class Api:
         r = requests.post(self.engagement_url,
                           headers=self.headers,
                           data=json.dumps(payload),
-                          verify=self.ssl_verification)
+                          verify=self.ssl_verification,
+                          cert=self.cert)
         r.raise_for_status()
         engagement_data = json.loads(r.text)
         print('New engagement,     id: ', engagement_data['id'])
@@ -148,7 +158,8 @@ class Api:
             r = requests.patch(self.engagement_url + str(engagement) + '/',
                                headers=self.headers,
                                data=json.dumps(payload),
-                               verify=self.ssl_verification)
+                               verify=self.ssl_verification,
+                               cert=self.cert)
             r.raise_for_status()
 
     def get_test(self, engagement):
@@ -157,7 +168,8 @@ class Api:
         r = requests.get(self.test_url,
                          headers=self.headers,
                          params=payload,
-                         verify=self.ssl_verification)
+                         verify=self.ssl_verification,
+                         cert=self.cert)
         r.raise_for_status()
         test_data = json.loads(r.text)
         for test in test_data.get('results', []):
@@ -179,7 +191,8 @@ class Api:
         r = requests.post(self.test_url,
                           headers=self.headers,
                           data=json.dumps(payload),
-                          verify=self.ssl_verification)
+                          verify=self.ssl_verification,
+                          cert=self.cert)
         r.raise_for_status()
         test_data = json.loads(r.text)
         print('New test,           id: ', test_data['id'])
@@ -190,7 +203,8 @@ class Api:
         r = requests.get(self.test_type_url,
                          headers=self.headers,
                          params=payload,
-                         verify=self.ssl_verification)
+                         verify=self.ssl_verification,
+                         cert=self.cert)
         r.raise_for_status()
         test_type_data = json.loads(r.text)
         for test_type in test_type_data.get('results', []):
@@ -232,13 +246,15 @@ class Api:
                                      headers=self.headers_without_json,
                                      data=payload,
                                      files=files,
-                                     verify=self.ssl_verification)
+                                     verify=self.ssl_verification,
+                                     cert=self.cert)
         else:
             response = requests.post(self.reimport_scan_url,
                                      headers=self.headers_without_json,
                                      data=payload,
                                      files=FORCE_MULTIPART,
-                                     verify=self.ssl_verification)
+                                     verify=self.ssl_verification,
+                                     cert=self.cert)
 
         response.raise_for_status()
 
@@ -255,7 +271,8 @@ class Api:
                                  headers=self.headers_without_json,
                                  data=payload,
                                  files=files,
-                                 verify=self.ssl_verification)
+                                 verify=self.ssl_verification,
+                                 cert=self.cert)
         response.raise_for_status()
 
         print()
