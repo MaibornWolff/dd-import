@@ -38,6 +38,9 @@ class Environment:
         self.extra_header_1_value = os.getenv('DD_EXTRA_HEADER_1_VALUE')
         self.extra_header_2_value = os.getenv('DD_EXTRA_HEADER_2_VALUE')
 
+        self.client_sertificate = os.getenv('DD_CLIENT_CERTIFICATE')
+        self.client_key = os.getenv('DD_CLIENT_KEY')
+
     def check_environment_reimport_findings(self):
         error_string = self.check_environment_common()
         if self.engagement_name is None:
@@ -84,6 +87,9 @@ class Environment:
         print('DD_SSL_VERIFY:                      ', self.ssl_verification)
         print('DD_EXTRA_HEADER_1:                  ', self.extra_header_1)
         print('DD_EXTRA_HEADER_2:                  ', self.extra_header_2)
+
+        print('DD_CLIENT_CERTIFICATE:              ', self.client_sertificate)
+        print('DD_CLIENT_KEY:                      ', self.clien_key)
         print('')
 
     def check_environment_languages(self):
