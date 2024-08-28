@@ -11,6 +11,8 @@ class Environment:
         self.product_name = os.getenv('DD_PRODUCT_NAME')
         self.product_type_name = os.getenv('DD_PRODUCT_TYPE_NAME')
         self.engagement_name = os.getenv('DD_ENGAGEMENT_NAME')
+        self.engagement_version = os.getenv('DD_ENGAGEMENT_VERSION', None)
+        self.engagement_deduplication = os.getenv('DD_ENGAGEMENT_DEDUPLICATION', 'False').lower() in ['true']
         self.engagement_target_start = os.getenv('DD_ENGAGEMENT_TARGET_START', datetime.date.today().isoformat())
         self.engagement_target_end = os.getenv('DD_ENGAGEMENT_TARGET_END', '2999-12-31')
         self.test_name = os.getenv('DD_TEST_NAME')
@@ -60,6 +62,8 @@ class Environment:
         print('DD_PRODUCT_TYPE_NAME:               ', self.product_type_name)
         print('DD_PRODUCT_NAME:                    ', self.product_name)
         print('DD_ENGAGEMENT_NAME:                 ', self.engagement_name)
+        print('DD_ENGAGEMENT_VERSION:              ', self.engagement_version)
+        print('DD_ENGAGEMENT_DEDUPLICATION:        ', self.engagement_deduplication)
         print('DD_ENGAGEMENT_TARGET_START:         ', self.engagement_target_start)
         print('DD_ENGAGEMENT_TARGET_END:           ', self.engagement_target_end)
         print('DD_TEST_NAME:                       ', self.test_name)

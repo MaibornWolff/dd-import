@@ -59,6 +59,8 @@ All parameters need to be provided as environment variables:
 | DD_PRODUCT_TYPE_NAME                | Mandatory          | Mandatory        | If a product type with this name does not exist, it will be created                               |
 | DD_PRODUCT_NAME                     | Mandatory          | Mandatory        | If a product with this name does not exist, it will be created                                    |
 | DD_ENGAGEMENT_NAME                  | Mandatory          | -                | If an engagement with this name does not exist for the given product, it will be created          |
+| DD_ENGAGEMENT_VERSION                 | Optional          | -                | If provided, the version is used as an additional filter to the name to find the matching engagement          |
+| DD_ENGAGEMENT_DEDUPLICATION                 | Optional          | -                | Default: false          |
 | DD_ENGAGEMENT_TARGET_START          | Optional           | -                | Format: YYYY-MM-DD, default: `today`. The target start date for a newly created engagement.       |
 | DD_ENGAGEMENT_TARGET_END            | Optional           | -                | Format: YYYY-MM-DD, default: `2999-12-31`. The target start date for a newly created engagement.  |
 | DD_TEST_NAME                        | Mandatory          | -                | If a test with this name does not exist for the given engagement, it will be created              |
@@ -175,6 +177,13 @@ Another example, showing how to use `dd-import` within a GitHub Action, can be f
 `./bin/runUnitTests.sh` - Runs the unit tests and reports the test coverage.
 
 `./bin/runDockerUnitTests.sh` - First creates the docker image and then starts a docker container in which the unit tests are executed.
+
+### Publish new Image
+
+```
+docker build -f docker/Dockerfile -t brightercore.azurecr.io/dd-import:latest .
+docker push brightercore.azurecr.io/dd-import:latest
+```
 
 ## License
 

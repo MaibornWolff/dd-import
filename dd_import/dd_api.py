@@ -107,6 +107,9 @@ class Api:
     def get_engagement(self, product):
         payload = {'name': self.environment.engagement_name,
                    'product': product}
+        if self.environment.engagement_version is not None:
+            payload['version'] = self.environment.engagement_version
+        
         r = requests.get(self.engagement_url,
                          headers=self.headers,
                          params=payload,
@@ -126,7 +129,11 @@ class Api:
                    'target_start': self.environment.engagement_target_start,
                    'target_end': self.environment.engagement_target_end,
                    'engagement_type': 'CI/CD',
+                   'deduplication_on_engagement': self.environment.engagement_deduplication,
                    'status': 'In Progress'}
+        if self.environment.engagement_version is not None:
+            payload['version'] = self.environment.engagement_version
+        
         if self.environment.source_code_management_uri is not None:
             payload['source_code_management_uri'] = self.environment.source_code_management_uri
         r = requests.post(self.engagement_url,

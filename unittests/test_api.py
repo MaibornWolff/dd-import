@@ -156,7 +156,7 @@ class TestApi(TestCase):
     def test_get_engagement_found(self, mockGet, mockEnv):
         response = Mock(spec=Response)
         response.status_code = 200
-        response.text = '{\"count\": 2, \"results\": [{\"id\": 2, \"name\": \"engagement_dev\"}, {\"id\": 3, \"name\": \"engagement\"}]}'
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 2, \"name\": \"engagement_dev\", \"version\": \"null\"}, {\"id\": 3, \"name\": \"engagement\", \"version\": \"null\"},  {\"id\": 4, \"name\": \"engagement\", \"version\": \"1.0.1\"}]}'
         mockGet.return_value = response
 
         api = Api()
@@ -165,6 +165,27 @@ class TestApi(TestCase):
         self.assertEqual(id, self.engagement_id)
         url = 'https://example.com/api/v2/engagements/'
         payload = {'name': 'engagement', 'product': self.product_id}
+        mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
+        response.raise_for_status.assert_called_once()
+
+    @patch('dd_import.environment.Environment')
+    @patch('requests.get')
+    @patch.dict('os.environ', {'DD_URL': 'https://example.com',
+                               'DD_API_KEY': 'api_key',
+                               'DD_ENGAGEMENT_NAME': 'engagement',
+                               'DD_ENGAGEMENT_VERSION': '1.0.1'})
+    def test_get_engagement_with_version_found(self, mockGet, mockEnv):
+        response = Mock(spec=Response)
+        response.status_code = 200
+        response.text = '{\"count\": 2, \"results\": [{\"id\": 2, \"name\": \"engagement_dev\", \"version\": \"null\"}, {\"id\": 3, \"name\": \"engagement\", \"version\": \"null\"},  {\"id\": 4, \"name\": \"engagement\", \"version\": \"1.0.1\"}]}'
+        mockGet.return_value = response
+
+        api = Api()
+        id = api.get_engagement(self.product_id)
+
+        self.assertEqual(id, self.engagement_id)
+        url = 'https://example.com/api/v2/engagements/'
+        payload = {'name': 'engagement', 'product': self.product_id, 'version': '1.0.1'}
         mockGet.assert_called_once_with(url, headers=self.header, params=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
@@ -195,6 +216,50 @@ class TestApi(TestCase):
     @patch('requests.post')
     @patch.dict('os.environ', {'DD_URL': 'https://example.com',
                                'DD_API_KEY': 'api_key',
+                               'DD_ENGAGEMENT_NAME': 'engagement',
+                               'DD_ENGAGEMENT_VERSION': '1.0.1'})
+    def test_new_engagement_with_version(self, mockPost, mockEnv):
+        response = Mock(spec=Response)
+        response.status_code = 200
+        response.text = '{\"id\": 3}'
+        mockPost.return_value = response
+
+        api = Api()
+        id = api.new_engagement(self.product_id)
+
+        self.assertEqual(id, self.engagement_id)
+        today = datetime.date.today().isoformat()
+        url = 'https://example.com/api/v2/engagements/'
+        payload = f'{{"name": "engagement", "product": 2, "target_start": "{today}", "target_end": "2999-12-31", "engagement_type": "CI/CD", "deduplication_on_engagement": false, "status": "In Progress", "version": "1.0.1"}}'
+        mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
+        response.raise_for_status.assert_called_once()
+
+    @patch('dd_import.environment.Environment')
+    @patch('requests.post')
+    @patch.dict('os.environ', {'DD_URL': 'https://example.com',
+                               'DD_API_KEY': 'api_key',
+                               'DD_ENGAGEMENT_NAME': 'engagement',
+                               'DD_ENGAGEMENT_DEDUPLICATION': 'True'})
+    def test_new_engagement_with_deduplication(self, mockPost, mockEnv):
+        response = Mock(spec=Response)
+        response.status_code = 200
+        response.text = '{\"id\": 3}'
+        mockPost.return_value = response
+
+        api = Api()
+        id = api.new_engagement(self.product_id)
+
+        self.assertEqual(id, self.engagement_id)
+        today = datetime.date.today().isoformat()
+        url = 'https://example.com/api/v2/engagements/'
+        payload = f'{{"name": "engagement", "product": 2, "target_start": "{today}", "target_end": "2999-12-31", "engagement_type": "CI/CD", "deduplication_on_engagement": true, "status": "In Progress"}}'
+        mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
+        response.raise_for_status.assert_called_once()
+
+    @patch('dd_import.environment.Environment')
+    @patch('requests.post')
+    @patch.dict('os.environ', {'DD_URL': 'https://example.com',
+                               'DD_API_KEY': 'api_key',
                                'DD_ENGAGEMENT_NAME': 'engagement'})
     def test_new_engagement_without_target(self, mockPost, mockEnv):
         response = Mock(spec=Response)
@@ -208,7 +273,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.engagement_id)
         today = datetime.date.today().isoformat()
         url = 'https://example.com/api/v2/engagements/'
-        payload = f'{{"name": "engagement", "product": 2, "target_start": "{today}", "target_end": "2999-12-31", "engagement_type": "CI/CD", "status": "In Progress"}}'
+        payload = f'{{"name": "engagement", "product": 2, "target_start": "{today}", "target_end": "2999-12-31", "engagement_type": "CI/CD", "deduplication_on_engagement": false, "status": "In Progress"}}'
         mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
@@ -230,7 +295,7 @@ class TestApi(TestCase):
 
         self.assertEqual(id, self.engagement_id)
         url = 'https://example.com/api/v2/engagements/'
-        payload = '{"name": "engagement", "product": 2, "target_start": "2023-02-01", "target_end": "2023-02-28", "engagement_type": "CI/CD", "status": "In Progress"}'
+        payload = '{"name": "engagement", "product": 2, "target_start": "2023-02-01", "target_end": "2023-02-28", "engagement_type": "CI/CD", "deduplication_on_engagement": false, "status": "In Progress"}'
         mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
@@ -252,7 +317,7 @@ class TestApi(TestCase):
         self.assertEqual(id, self.engagement_id)
         today = datetime.date.today().isoformat()
         url = 'https://example.com/api/v2/engagements/'
-        payload = f'{{"name": "engagement", "product": 2, "target_start": "{today}", "target_end": "2999-12-31", "engagement_type": "CI/CD", "status": "In Progress", "source_code_management_uri": "https://github.com/MyOrg/MyProject/tree/main"}}'
+        payload = f'{{"name": "engagement", "product": 2, "target_start": "{today}", "target_end": "2999-12-31", "engagement_type": "CI/CD", "deduplication_on_engagement": false, "status": "In Progress", "source_code_management_uri": "https://github.com/MyOrg/MyProject/tree/main"}}'
         mockPost.assert_called_once_with(url, headers=self.header, data=payload, verify=True)
         response.raise_for_status.assert_called_once()
 
