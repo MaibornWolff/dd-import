@@ -1,5 +1,7 @@
 # dd-import
 
+*As we no longer work with DefectDojo, this repository has been archived.*
+
 > A utility to (re-)import findings and language data into [DefectDojo](https://www.defectdojo.org/)
 
 Findings and languages can be imported into DefectDojo via an [API](https://defectdojo.github.io/django-DefectDojo/integrations/api-v2-docs/). To make automated build and deploy pipelines easier to implement, `dd-import` provides some convenience functions:
